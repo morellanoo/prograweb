@@ -4,7 +4,7 @@
 let nombre = "Juan"; // variable de tipo string
 let edad = 1; // variable de tipo number
 let esEstudiante = true; // variable de tipo boolean
-
+//hola
 console.log(nombre,edad);
 
 console.log("esteban"+1); // concatenación de string con número
