@@ -16,12 +16,23 @@ console.log(mayorDeTres(5, 10, 3));
 
 /*2. Ejercicio 2: Función Expresada
 
-Crea una función expresada que reciba un array de strings y retorne un string que concatena todos los elementos del array separados por espacios.
+Crea una función expresada que reciba un array de strings y retorne un string que concatena todos los elementos del array separados por espacios. */
 
-3. Ejercicio 3: Función Flecha
-Convierte la función del ejercicio anterior a una función de flecha. Además, agrega una validación para que, si el array está vacío, retorna un mensaje de advertencia.
+function saludo(saludo, objeto) {
+    return (saludo +" "+objeto)
+}
+console.log(saludo("Hola", "Mundo"));
 
-4. Ejercicio 4: Estructura If-Else
+/* 3. Ejercicio 3: Función Flecha
+Convierte la función del ejercicio anterior a una función de flecha. Además, agrega una validación para que, si el array está vacío, retorna un mensaje de advertencia.*/
+let saludoflecha = array => array.length = 0 ? 'Array Vacio': rray.join("")
+
+console.log(saludoflecha("Hola"+"Mundo"))
+
+
+//todo lo que va dps del ? es lo que se ejecuta si la condicion es verdadera, y lo que va dps del : es lo que se ejecuta si la condicion es falsa
+
+/* 4. Ejercicio 4: Estructura If-Else
 Escribe una función que tome una temperatura en grados Celsius como argumento y devuelva un mensaje que indique si hace frío (menor a 15 grados), templado (entre 15 y 25 grados) o calor (mayor a 25 grados).
 
 5. Ejercicio 5: Operador Ternario
