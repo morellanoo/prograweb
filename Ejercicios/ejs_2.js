@@ -25,17 +25,19 @@ console.log(saludo("Hola", "Mundo"));
 
 /* 3. Ejercicio 3: Función Flecha
 Convierte la función del ejercicio anterior a una función de flecha. Además, agrega una validación para que, si el array está vacío, retorna un mensaje de advertencia.*/
-let saludoflecha = array => array.length = 0 ? 'Array Vacio': rray.join("")
+let saludoflecha = array => array.length === 0 ? 'Array Vacio': array.join(" ")
 
-console.log(saludoflecha("Hola"+"Mundo"))
-
+console.log(saludoflecha(["Hola","Mundo"]));
 
 //todo lo que va dps del ? es lo que se ejecuta si la condicion es verdadera, y lo que va dps del : es lo que se ejecuta si la condicion es falsa
 
-/* 4. Ejercicio 4: Estructura If-Else
-Escribe una función que tome una temperatura en grados Celsius como argumento y devuelva un mensaje que indique si hace frío (menor a 15 grados), templado (entre 15 y 25 grados) o calor (mayor a 25 grados).
 
-5. Ejercicio 5: Operador Ternario
+/* 4. Ejercicio 4: Estructura If-Else
+Escribe una función que tome una temperatura en grados Celsius como argumento y devuelva un mensaje que indique si hace frío (menor a 15 grados), templado (entre 15 y 25 grados) o calor (mayor a 25 grados).*/
+
+
+
+/*5. Ejercicio 5: Operador Ternario
 Reescribe una función que tome una hora (formato 24 horas) y devuelva "Buenos días" si es antes de las 12, "Buenas tardes" si es entre las 12 y 18, o "Buenas noches" si es después de las 18, utilizando operadores ternarios.
 
 6. Ejercicio 6: Operadores And y Or
