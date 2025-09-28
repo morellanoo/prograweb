@@ -1,0 +1,38 @@
+/* CSS: colores, box model, position, medidas, fuentes, display */
+
+body{}
+
+.parrafoGenerico{
+    background-color: yellow;
+    margin:10px;
+
+}
+.parrafoTextoEspecial{
+    color:violet;
+        font-family: "Cutive Mono", monospace;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#spanEspecial{
+    border:5px solid blue;
+    padding:5px;
+    margin:50px;
+    display: block;
+}
+
+#colizq {
+    display: inline-block;
+    width: 45vw;
+    vertical-align: top;
+    margin-right: 2%;
+}
+#colder{
+    display: inline-block;
+    width: 45vw;
+    vertical-align: top;
+}
+
+#fotoSteve1{
+    width: 10vw;
+}
