@@ -215,3 +215,35 @@ console.log(first20); //imprime el primer elemento del array que cumple la condi
 //  17. some (≥18)
 //  Escribí un código que verifique con some si hay al menos una edad ≥18.
 
+const numbers = [55, 4, 9, 16, 29];
+let someOver18 = numbers.some(num => num >= 18); 
+console.log(someOver18) // me devuelve un valor booleano
+
+// 18. for...of (países)
+//  Escribí un código que imprima cada país de un array de 5 países con for...of.
+
+const paises = ["Argentina", "Brasil", "Chile", "Uruguay", "Paraguay"]
+for (const pais of paises) {
+    console.log(pais);
+}
+//for...of es la forma más simple y directa de recorrer un array cuando solo necesitas los valores (no los índices).
+
+// 19. forEach (números)
+//  Escribí un código que imprima cada elemento de un array de números con forEach.
+
+const numbersarray = [4, 9, 16, 25, 63];
+numbersarray.forEach(function(numero) {
+    console.log(numero);
+});
+
+//  20. find (primer par)
+//  Escribí un código que encuentre el primer par de un array con find.
+
+//  21. some (>20)
+//  Escribí un código que retorne true si algún número es >20.
+
+//  22. every (todos strings)
+//  Escribí un código que verifique con every si todos los elementos de un array son strings.
+
+//  23. map (nombres)
+//  Escribí un código que, dado un array de personas {nombre, edad}, cree con map un array solo de nombres.

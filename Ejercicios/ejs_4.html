@@ -1,34 +1,128 @@
 <!-- Listas
- Escribí el código HTML con una <ul> de 5 comidas y una <ol> de 5 países.
+Escribí el código HTML con una <ul> de 5 comidas y una <ol> de 5 países.-->
+<ul>
+    <li>Cafe</li>
+    <li>Mate</li>
+    <li>Te</li>
+    <li>Fideos</li>
+    <li>Chocolatada</li>
+</ul>
+
+<ol>
+    <li>Arg</li>
+    <li>Chi</li>
+    <li>Br</li>
+    <li>Par</li>
+    <li>Uru</li>
+</ol>
 
 
-https://www.w3schools.com/html/html_tables.asp
- 2. Tabla
- Escribí el código HTML de una tabla con <th>: Producto, Precio, Stock y 3 filas de datos.
-https://www.w3schools.com/html/html_forms.asp
- 3. Formulario
- Escribí el código HTML de un formulario con: <input type="text"> para nombre, <textarea> comentarios, <select> (3 opciones) y <button>Enviar</button>.
-DOM
-https://www.w3schools.com/js/js_htmldom_elements.asp
- 4. Cambiar texto
- Escribí un código JS que seleccione un <h1> y un <p> y cambie su textContent.
-https://www.w3schools.com/js/js_htmldom_html.asp
- 5. Cambiar color de fondo
- Escribí un código JS que al hacer clic en un botón cambie document.body.style.backgroundColor.
-https://www.w3schools.com/js/js_htmldom_nodes.asp
- 6. Crear <li>
- Escribí un código JS que cree un <li> con document.createElement y lo agregue a una <ul> con appendChild.
- 7. Eliminar primer <li>
- Escribí un código JS que elimine el primer <li> de una lista.
-https://www.w3schools.com/js/js_htmldom_eventlistener.asp
- 8. Event listener
- Escribí un código JS que, al hacer clic en un botón, cambie el texto de un <p> a "¡Hola, Mundo!".
-https://www.w3schools.com/jsref/prop_element_classlist.asp
- 9. classList.toggle
- Escribí un código JS que, al presionar un botón, haga div.classList.toggle("resaltado") para alternar un color de fondo.
-https://www.w3schools.com/js/js_validation.asp
- 10. Validar formulario vacío
- Escribí un código JS que, al enviar el formulario, verifique si el input de nombre está vacío y, si lo está, muestre alert("Completá el nombre").
-https://www.w3schools.com/js/js_htmldom_collections.asp
- 11. Recorrer <p>
- Escribí un código JS que seleccione todos los <p> y reemplace su contenido por "Párrafo actualizado". -->
+<!-- 2. Tabla
+Escribí el código HTML de una tabla con <th>: Producto, Precio, Stock y 3 filas de datos.-->
+<table>
+    <tr>
+    <th>Producto</th>
+    <th>Precio</th>
+    <th>Stock</th>
+    </tr>
+    <tr>
+    <td>Fideos</td>
+    <td>500</td>
+    <td>9</td>
+    </tr>
+</table>
+
+<!-- 3. Formulario
+Escribí el código HTML de un formulario con: <input type="text"> para nombre, <textarea> comentarios, <select> (3 opciones) y <button>Enviar</button>.
+DOM-->
+<form>
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre">
+    <br><br>
+
+    <label for="comentarios">Comentarios:</label>
+    <textarea id="comentarios" name="comentarios"></textarea>
+    <br><br>
+
+    <label for="opciones">Opciones:</label>
+    <select id="opciones" name="opciones">
+        <option value="1">Opcion 1</option>
+        <option value="2">Opcion 2</option>
+        <option value="3">Opcion 3</option>
+    </select>
+
+    <button type="submit">Enviar</button>
+</form>
+
+<!-- 4. Cambiar texto
+Escribí un código JS que seleccione un <h1> y un <p> y cambie su textContent.-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar Texto</title>
+</head>
+<body>
+    <h1 id="titulo">Texto Original</h1>
+    <p id="parrafo">Este es un párrafo</p>
+    
+    <button onclick="cambiarTexto()">Cambiar Texto</button> <!--cuando se hace clic, ejecuta la función cambiarTexto()-->
+    
+    <script src="ejs_4.js"></script> <!--Conecta el archivo JavaScript externo-->
+</body>
+
+<!-- 5. Cambiar color de fondo
+Escribí un código JS que al hacer clic en un botón cambie document.body.style.backgroundColor.-->
+<button
+    onclick="cambiarColor()"> Cambiar Color </button>
+
+<!-- 6. Crear <li>
+Escribí un código JS que cree un <li> con document.createElement y lo agregue a una <ul> con appendChild.-->
+<button 
+    onclick="crearLi()">Crear Lista</button>
+<ul id="lista"></ul>
+
+<!-- 7. Eliminar primer <li>
+Escribí un código JS que elimine el primer <li> de una lista.-->
+
+<ul id="listas">
+    <li>Primer elemento</li>
+    <li>Segundo elemento</li>
+    <li>Tercer elemento</li>
+</ul>
+
+<button onclick="eliminarPrimerLi()">Eliminar primer elemento</button>
+
+<!-- 8. Event listener
+Escribí un código JS que, al hacer clic en un botón, cambie el texto de un <p> a "¡Hola, Mundo!".-->
+
+<p id="texto">Texto original</p>
+<button id="miBoton">Haz click</button>
+
+<!-- 9. classList.toggle
+Escribí un código JS que, al presionar un botón, haga div.classList.toggle("resaltado") para alternar un color de fondo.-->
+<style>
+    .resaltado {
+        background-color: yellow;
+    }
+    </style>
+<div id="miDiv">Este es un div</div>
+    <br>
+    <button id="miNuevoBoton">Cambiar color de fondo</button>
+
+<!-- 10. Validar formulario vacío
+Escribí un código JS que, al enviar el formulario, verifique si el input de nombre está vacío y, si lo está, muestre alert("Completá el nombre").-->
+
+<form id="miFormulario">
+        <label>Nombre:</label>
+        <input type="text" id="nombre">
+        <button type="submit">Enviar</button>
+    </form>
+
+<!-- 11. Recorrer <p>
+Escribí un código JS que seleccione todos los <p> y reemplace su contenido por "Párrafo actualizado". -->
+    <p>Primer párrafo</p>
+    <p>Segundo párrafo</p>
+    <p>Tercer párrafo</p>
+
+    <button id="actualizar">Actualizar párrafos</button>
