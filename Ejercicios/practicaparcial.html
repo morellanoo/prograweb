@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -8,10 +9,10 @@
     <h1>Biblioteca Personal</h1>
 
     <h2>Agregar Libro</h2>
-    <form id="formAgregar">
+    <form onsubmit="return agregarLibroDesdeFormulario()">
         <label>Título: <input type="text" id="titulo" required></label><br>
         <label>Autor: <input type="text" id="autor" required></label><br>
-        <label>Año: <input type="number" id="anio" required></label><br>
+        <label>Año: <input type="number" id="anio" required min="0" max="2025"></label><br>
         <label>Género: 
             <select id="genero" required>
                 <option value="">Seleccione</option>
@@ -37,19 +38,26 @@
         <option value="Fantasía">Fantasía</option>
         <option value="Terror">Terror</option>
     </select>
-    <button onclick="mostrarFiltrados(document.getElementById('filtroGenero').value)">Filtrar</button>
-    <button onclick="mostrarLibros()">Mostrar Todos</button>
+    <button onclick="filtrarLibros()">Filtrar</button>
+    <button onclick="mostrarTodos()">Mostrar Todos</button>
 
     <hr>
 
     <h2>Lista de Libros</h2>
-    <div id="listaLibros"></div>
+    <div id="listaLibros">
+        <p>No hay libros</p>
+    </div>
 
     <hr>
 
     <h2>Estadísticas</h2>
-    <div id="estadisticas"></div>
+    <div id="estadisticas">
+        <p>Total de libros: 0</p>
+        <p>Libros leídos: 0</p>
+        <p>Libros no leídos: 0</p>
+        <p>Géneros diferentes: 0</p>
+    </div>
 
-    <script src="biblioteca.js"></script>
+    <script src="practicaparcial.js"></script>
 </body>
 </html>

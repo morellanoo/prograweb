@@ -1,130 +1,143 @@
 let libros = [];
 let idCounter = 1;
 
-function agregarLibro(titulo, autor, anio, genero, leido = false, arrayLibros = libros) {
-    const libro = {
-        id: idCounter++,
+// Función que se llama cuando se envía el formulario
+function agregarLibroDesdeFormulario() {
+    let titulo = document.getElementById('titulo').value;
+    let autor = document.getElementById('autor').value;
+    let anio = document.getElementById('anio').value;
+    let genero = document.getElementById('genero').value;
+    let leido = document.getElementById('leido').checked;
+    
+    agregarLibro(titulo, autor, anio, genero, leido);
+    
+    // Limpiar formulario
+    document.getElementById('titulo').value = '';
+    document.getElementById('autor').value = '';
+    document.getElementById('anio').value = '';
+    document.getElementById('genero').value = '';
+    document.getElementById('leido').checked = false;
+    
+    return false; // Evita que la página se recargue
+}
+
+// Agrega un libro al array
+function agregarLibro(titulo, autor, anio, genero, leido) {
+    let libro = {
+        id: idCounter,
         titulo: titulo,
         autor: autor,
         anio: parseInt(anio),
         genero: genero,
         leido: leido
     };
-    arrayLibros.push(libro);
-    if (arrayLibros === libros && typeof document !== 'undefined') mostrarLibros();
-    return libro;
+    idCounter++;
+    libros.push(libro);
+    mostrarTodos();
 }
 
-function eliminarLibro(id, arrayLibros = libros) {
-    const index = arrayLibros.findIndex(libro => libro.id === id);
-    if (index !== -1) {
-        arrayLibros.splice(index, 1);
-        if (arrayLibros === libros && typeof document !== 'undefined') mostrarLibros();
+// Elimina un libro
+function eliminarLibro(id) {
+    for (let i = 0; i < libros.length; i++) {
+        if (libros[i].id === id) {
+            libros.splice(i, 1);
+            break;
+        }
+    }
+    mostrarTodos();
+}
+
+// Marca un libro como leído o no leído
+function marcarComoLeido(id) {
+    for (let i = 0; i < libros.length; i++) {
+        if (libros[i].id === id) {
+            libros[i].leido = !libros[i].leido;
+            break;
+        }
+    }
+    mostrarTodos();
+}
+
+// Muestra todos los libros
+function mostrarTodos() {
+    mostrarLibrosEnPantalla(libros);
+    mostrarEstadisticas();
+}
+
+// Filtra libros por género
+function filtrarLibros() {
+    let generoSeleccionado = document.getElementById('filtroGenero').value;
+    
+    if (generoSeleccionado === '') {
+        mostrarTodos();
+    } else {
+        let librosFiltrados = [];
+        for (let i = 0; i < libros.length; i++) {
+            if (libros[i].genero === generoSeleccionado) {
+                librosFiltrados.push(libros[i]);
+            }
+        }
+        mostrarLibrosEnPantalla(librosFiltrados);
     }
 }
 
-function marcarComoLeido(id, arrayLibros = libros) {
-    const libro = arrayLibros.find(l => l.id === id);
-    if (libro) {
-        libro.leido = !libro.leido;
-        if (arrayLibros === libros && typeof document !== 'undefined') mostrarLibros();
-    }
-}
-
-function obtenerLibros(arrayLibros = libros) {
-    return arrayLibros;
-}
-
-function filtrarPorGenero(genero, arrayLibros = libros) {
-    return genero ? arrayLibros.filter(libro => libro.genero === genero) : arrayLibros;
-}
-
-function obtenerEstadisticas(arrayLibros = libros) {
-    return {
-        total: arrayLibros.length,
-        leidos: arrayLibros.filter(l => l.leido).length,
-        noLeidos: arrayLibros.filter(l => !l.leido).length,
-        generos: [...new Set(arrayLibros.map(l => l.genero))].length
-    };
-}
-
-function mostrarLibros() {
-    const container = document.getElementById('listaLibros');
-    const stats = document.getElementById('estadisticas');
+// Muestra los libros en pantalla
+function mostrarLibrosEnPantalla(arrayLibros) {
+    let container = document.getElementById('listaLibros');
     
-    if (!container) return;
-    
-    if (libros.length === 0) {
+    if (arrayLibros.length === 0) {
         container.innerHTML = '<p>No hay libros</p>';
     } else {
-        container.innerHTML = libros.map(libro => `
-            <div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
-                <h3>${libro.titulo}</h3>
-                <p>Autor: ${libro.autor}</p>
-                <p>Año: ${libro.anio}</p>
-                <p>Género: ${libro.genero}</p>
-                <p>Estado: ${libro.leido ? 'LEÍDO' : 'NO LEÍDO'}</p>
-                <button onclick="marcarComoLeido(${libro.id})">
-                    ${libro.leido ? 'Marcar no leído' : 'Marcar leído'}
-                </button>
-                <button onclick="eliminarLibro(${libro.id})">Eliminar</button>
-            </div>
-        `).join('');
-    }
-    
-    if (stats) {
-        const estadisticas = obtenerEstadisticas();
-        stats.innerHTML = `
-            <p>Total de libros: ${estadisticas.total}</p>
-            <p>Libros leídos: ${estadisticas.leidos}</p>
-            <p>Libros no leídos: ${estadisticas.noLeidos}</p>
-            <p>Géneros diferentes: ${estadisticas.generos}</p>
-        `;
+        let html = '';
+        for (let i = 0; i < arrayLibros.length; i++) {
+            let libro = arrayLibros[i];
+            let estado = libro.leido ? 'LEÍDO' : 'NO LEÍDO';
+            let botonTexto = libro.leido ? 'Marcar no leído' : 'Marcar leído';
+            
+            html += '<div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">';
+            html += '<h3>' + libro.titulo + '</h3>';
+            html += '<p>Autor: ' + libro.autor + '</p>';
+            html += '<p>Año: ' + libro.anio + '</p>';
+            html += '<p>Género: ' + libro.genero + '</p>';
+            html += '<p>Estado: ' + estado + '</p>';
+            html += '<button onclick="marcarComoLeido(' + libro.id + ')">' + botonTexto + '</button> ';
+            html += '<button onclick="eliminarLibro(' + libro.id + ')">Eliminar</button>';
+            html += '</div>';
+        }
+        container.innerHTML = html;
     }
 }
 
-function mostrarFiltrados(genero) {
-    const container = document.getElementById('listaLibros');
-    if (!container) return;
+// Muestra las estadísticas
+function mostrarEstadisticas() {
+    let total = libros.length;
+    let leidos = 0;
+    let noLeidos = 0;
+    let generosUnicos = [];
     
-    const librosFiltrados = filtrarPorGenero(genero);
-    
-    if (librosFiltrados.length === 0) {
-        container.innerHTML = '<p>No hay libros de este género</p>';
-    } else {
-        container.innerHTML = librosFiltrados.map(libro => `
-            <div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
-                <h3>${libro.titulo}</h3>
-                <p>Autor: ${libro.autor}</p>
-                <p>Año: ${libro.anio}</p>
-                <p>Género: ${libro.genero}</p>
-                <p>Estado: ${libro.leido ? 'LEÍDO' : 'NO LEÍDO'}</p>
-                <button onclick="marcarComoLeido(${libro.id})">
-                    ${libro.leido ? 'Marcar no leído' : 'Marcar leído'}
-                </button>
-                <button onclick="eliminarLibro(${libro.id})">Eliminar</button>
-            </div>
-        `).join('');
+    for (let i = 0; i < libros.length; i++) {
+        if (libros[i].leido) {
+            leidos++;
+        } else {
+            noLeidos++;
+        }
+        
+        // Agregar género si no está en la lista
+        let generoExiste = false;
+        for (let j = 0; j < generosUnicos.length; j++) {
+            if (generosUnicos[j] === libros[i].genero) {
+                generoExiste = true;
+                break;
+            }
+        }
+        if (!generoExiste) {
+            generosUnicos.push(libros[i].genero);
+        }
     }
-}
-
-if (typeof document !== 'undefined') {
-    window.addEventListener('load', function() {
-        document.getElementById('formAgregar').addEventListener('submit', function(e) {
-            e.preventDefault();
-            agregarLibro(
-                document.getElementById('titulo').value,
-                document.getElementById('autor').value,
-                document.getElementById('anio').value,
-                document.getElementById('genero').value,
-                document.getElementById('leido').checked
-            );
-            this.reset();
-        });
-        mostrarLibros();
-    });
-}
-
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { agregarLibro, eliminarLibro, marcarComoLeido, obtenerLibros, filtrarPorGenero, obtenerEstadisticas };
+    
+    let stats = document.getElementById('estadisticas');
+    stats.innerHTML = '<p>Total de libros: ' + total + '</p>';
+    stats.innerHTML += '<p>Libros leídos: ' + leidos + '</p>';
+    stats.innerHTML += '<p>Libros no leídos: ' + noLeidos + '</p>';
+    stats.innerHTML += '<p>Géneros diferentes: ' + generosUnicos.length + '</p>';
 }
