@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Personal</title>
+</head>
+<body>
+    <h1>Biblioteca Personal</h1>
+
+    <h2>Agregar Libro</h2>
+    <form onsubmit="return agregarLibroDesdeFormulario()">
+        <label>Título: <input type="text" id="titulo" required></label><br>
+        <label>Autor: <input type="text" id="autor" required></label><br>
+        <label>Año: <input type="number" id="anio" required min="0" max="2025"></label><br>
+        <label>Género: 
+            <select id="genero" required>
+                <option value="">Seleccione</option>
+                <option value="Ficción">Ficción</option>
+                <option value="No Ficción">No Ficción</option>
+                <option value="Ciencia Ficción">Ciencia Ficción</option>
+                <option value="Fantasía">Fantasía</option>
+                <option value="Terror">Terror</option>
+            </select>
+        </label><br>
+        <label><input type="checkbox" id="leido"> Leído</label><br>
+        <button type="submit">Agregar</button>
+    </form>
+
+    <hr>
+
+    <h2>Filtrar por Género</h2>
+    <select id="filtroGenero">
+        <option value="">Todos</option>
+        <option value="Ficción">Ficción</option>
+        <option value="No Ficción">No Ficción</option>
+        <option value="Ciencia Ficción">Ciencia Ficción</option>
+        <option value="Fantasía">Fantasía</option>
+        <option value="Terror">Terror</option>
+    </select>
+    <button onclick="filtrarLibros()">Filtrar</button>
+    <button onclick="mostrarTodos()">Mostrar Todos</button>
+
+    <hr>
+
+    <h2>Lista de Libros</h2>
+    <div id="listaLibros">
+        <p>No hay libros</p>
+    </div>
+
+    <hr>
+
+    <h2>Estadísticas</h2>
+    <div id="estadisticas">
+        <p>Total de libros: 0</p>
+        <p>Libros leídos: 0</p>
+        <p>Libros no leídos: 0</p>
+        <p>Géneros diferentes: 0</p>
+    </div>
+
+    <script src="practicaparcial.js"></script>
+</body>
+</html>
