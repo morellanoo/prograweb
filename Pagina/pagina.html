@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>b-Shopper — Smart Research</title> <!-- Título corto y meta descripción -->
+    <meta name="description" content="Servicios de investigación y consultoría. Armá tu brief y contactanos." />
+
+    <link rel="icon" href="fotos/b-shopper para fondo azul.png" /> <!-- Logo -->
+
+    <link rel="stylesheet" href="pagina.css" /> <!-- CSS principal -->
+</head>
+
+<body id="inicio">
+    <div id="live" aria-live="polite" class="visually-hidden"></div> <!-- Contenedor para mensajes dinámicos -->
+
+    <!-- Header y navegacion -->
+    <header>
+        <div class="container header__inner">
+            <a class="brand" href="#inicio" aria-label="Ir al inicio">
+                <img src="fotos/b-shopper para fondo azul.png" alt="b-Shopper" width="156" height="42" />
+            </a><!-- Logo -->
+
+            <button id="menu-toggle" class="nav-toggle" aria-expanded="false" aria-controls="site-nav"
+                aria-label="Abrir menú">☰</button> <!-- Botón de menú mobile-->
+
+            <!-- Menú principal del sitio. En mobile arranca oculto (hidden) y JS lo alterna. En desktop es un inline nav común. Mantengo enlaces ancla (#seccion) -->
+            <nav id="site-nav" class="nav" hidden> <!-- Nav principal -->
+                <a href="#inicio">Inicio</a>
+                <a href="#servicios">Servicios</a>
+                <a href="#metodologia">Metodología</a>
+                <a href="#casos">Casos</a>
+                <a href="#nosotras">Nosotras</a>
+                <a href="#contacto">Contacto</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero (portada)-->
+        <section id="hero" aria-labelledby="hero-title">
+            <div class="container hero__inner">
+                <div class="hero__copy">
+                    <h1 id="hero-title">Smart Research<br />para decisiones claras</h1>
+                    <p class="lead">Diseñamos y ejecutamos investigación a medida. Armá tu brief y conversemos.</p>
+                    <p><a class="btn cta" href="#servicios">Ver servicios</a></p>
+                </div>
+                <figure class="hero__media">
+                    <!-- Foto de stock -->
+                    <img src="fotos/iStock-508555286.jpg" alt="Imagen representativa de investigación e insights" />
+                </figure>
+            </div>
+        </section>
+
+        <!-- Servicios -->
+        <!-- Armo el "catalogo" de servicios con cards. Cada card tiene un botón “Agregar a mi solicitud”. Ese botón dispara el CRUD del “Brief Builder”-->
+        <section id="servicios" aria-labelledby="servicios-title">
+            <div class="container">
+                <h2 id="servicios-title">Servicios</h2>
+                <p class="section-intro">Seleccioná lo que necesitás; podés ajustar el alcance después.</p>
+
+                <div class="grid services">
+                    <!-- data-service me da un identificador simple para cada servicio -->
+                    <article class="service-card" data-service="srv-01">
+                        <h3 class="service-title">Exploratorias &amp; Desk Research</h3>
+                        <p>Mapeamos contexto, competidores y tendencias para orientar decisiones.</p>
+                        <button class="btn" data-add-service>Agregar a mi solicitud</button>
+                    </article>
+
+                    <article class="service-card" data-service="srv-02">
+                        <h3 class="service-title">Encuestas Cuantitativas</h3>
+                        <p>Diseño, muestreo y análisis estadístico orientado a objetivos.</p>
+                        <button class="btn" data-add-service>Agregar a mi solicitud</button>
+                    </article>
+
+                    <article class="service-card" data-service="srv-03">
+                        <h3 class="service-title">Entrevistas / Focus Groups</h3>
+                        <p>Aprendizajes profundos con guiones claros y síntesis accionable.</p>
+                        <button class="btn" data-add-service>Agregar a mi solicitud</button>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Brief (CRUD) -->
+        <!--  “Tu solicitud” es el panel donde se listan los ítems que se fueron agregando. Se puede editar o eliminar "productos" . Además, mantengo un <textarea> oculto con el JSON final para EmailJS -->
+        <section id="brief" aria-labelledby="brief-title">
+            <div class="container">
+                <h2 id="brief-title">Tu solicitud</h2>
+                <p class="section-intro">Editá el alcance, añadí notas o eliminá ítems antes de enviar.</p>
+
+                <div class="brief panel">
+                    <div class="brief__head">
+                        <!-- Contador simple de elementos para feedback rápido -->
+                        <span><strong>Ítems:</strong> <span id="brief-count">0</span></span>
+                        <!-- Botón para vaciar el brief completo (confirmo en JS) -->
+                        <button id="brief-clear" class="btn-ghost">Vaciar</button>
+                    </div>
+
+                    <!-- Lista dinámica (la rellena JS con <li>) -->
+                    <ul id="brief-list" class="brief-list" aria-live="polite"></ul>
+
+                    <!-- Mensaje cuando la lista está vacía -->
+                    <p id="brief-empty">Todavía no agregaste servicios. Sumá alguno desde la sección anterior.</p>
+
+                    <!-- Campo técnico sincronizado por JS: viaja por EmailJS -->
+                    <textarea id="brief-payload" class="visually-hidden" aria-hidden="true"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metodologia  -->
+            <div class="container">
+                <h2 id="metodologia-title">Cómo trabajamos</h2>
+                <ol class="timeline">
+                    <li><strong>Brief</strong> — Alineamos objetivos y contexto.</li>
+                    <li><strong>Propuesta</strong> — Diseño metodológico y planning.</li>
+                    <li><strong>Ejecución</strong> — Campo, análisis y sanity checks.</li>
+                    <li><strong>Entrega</strong> — Informe y workshop de insights.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Casos -->
+        <section id="casos" aria-labelledby="casos-title">
+            <div class="container">
+                <h2 id="casos-title">Casos</h2>
+                <div class="grid cases">
+                    <article class="case-card">
+                        <h3>Rediseño de oferta</h3>
+                        <p>Aprendizajes que reorientaron pricing y posicionamiento.</p>
+                    </article>
+                    <article class="case-card">
+                        <h3>Experiencia de cliente</h3>
+                        <p>Mapa de dolor y oportunidades priorizadas por impacto.</p>
+                    </article>
+                    <article class="case-card">
+                        <h3>Validación de concepto</h3>
+                        <p>Test iterativo que aceleró el go-to-market.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nosotras  -->
+        <section id="nosotras" aria-labelledby="nosotras-title">
+            <div class="container">
+                <h2 id="nosotras-title">Nosotras</h2>
+                <div class="team">
+                    <article class="member">
+                        <img src="fotos/iStock-498720770.jpg" alt="Nombre Apellido — Research Lead" />
+                        <div>
+                            <h3>Nombre Apellido</h3>
+                            <p>Research Lead. Metodologías mixtas, datos accionables.</p>
+                        </div>
+                    </article>
+                    <article class="member">
+                        <img src="fotos/iStock-495731108.jpg" alt="Nombre Apellido — Project Manager" />
+                        <div>
+                            <h3>Nombre Apellido</h3>
+                            <p>Project Manager. Logística de campo y calidad de datos.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contacto -->
+        <section id="contacto" aria-labelledby="contacto-title">
+            <div class="container">
+                <h2 id="contacto-title">Contactanos</h2>
+                <!--Configuro EmailJS -->
+                <form id="contact-form" class="contact" novalidate data-emailjs-service="service_290h9gs" 
+                    data-emailjs-template="template_kwxo81v">
+                    <label>
+                        <span>Nombre</span>
+                        <input type="text" name="nombre" id="input-nombre" required />
+                    </label>
+                    <label>
+                        <span>Email</span>
+                        <input type="email" name="email" id="input-email" required />
+                    </label>
+                    <label>
+                        <span>Empresa (opcional)</span>
+                        <input type="text" name="empresa" id="input-empresa" />
+                    </label>
+                    <label class="span-2">
+                        <span>Mensaje</span>
+                        <textarea name="mensaje" id="input-mensaje" rows="5" required></textarea>
+                    </label>
+                    <div class="actions">
+                        <button type="submit" class="btn">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer__inner">
+            <small>© <span id="year"></span> b-Shopper — Smart Research</small>
+            <ul class="social">
+                <li><a href="#" aria-label="LinkedIn">LinkedIn</a></li>
+                <li><a href="#" aria-label="Email">Email</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- Botón flotante para volver arriba -->
+    <button id="back-to-top" class="back-to-top" hidden aria-label="Volver arriba">↑</button>
+
+    <!-- Referencio JS -->
+    <script src="pagina.js" defer></script>
+    <script>
+        // Actualizo el año automáticamente
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>
