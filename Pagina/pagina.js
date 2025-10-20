@@ -253,7 +253,7 @@ function getEmailConfig() {
   return { SERVICE_ID, TEMPLATE_ID, PUBLIC_KEY };
 }
 
-/* Validaciones de form */
+/* Funciones de validaciones de form */
 // Valida formato básico de email
 function isValidEmail(str) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(str).trim());
@@ -264,6 +264,14 @@ function setFieldError(inputEl, hasError) {
   inputEl.setAttribute("aria-invalid", hasError ? "true" : "false");
   if (hasError) inputEl.classList.add("is-invalid");
   else inputEl.classList.remove("is-invalid");
+}
+
+// Valida formato del nombre
+function isValidName(value) {
+  const s = String(value || "").trim();
+  if (s.length < 2) return false;
+  if (/\d/.test(s)) return false;
+  return /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü' -]+$/.test(s);
 }
 
 // Helpers
@@ -353,7 +361,7 @@ function initContact() {
     setFieldError(inputEmail, false);
     setFieldError(inputMensaje, false);
 
-    // Mas validaciones del forms antes de enviar
+    /* Validaciones del forms antes de enviar */
 
     // Brief vacío
     if (Array.isArray(briefSnapshot) && briefSnapshot.length === 0) {
@@ -386,12 +394,12 @@ function initContact() {
       live.textContent = "Completá el email.";
       return;
     }
-    //Nombre con formato inválido
-    function isValidName(value) {
-      const s = String(value || "").trim();
-      if (s.length < 2) return false;
-      if (/\d/.test(s)) return false;
-      return /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü' -]+$/.test(s);
+    //  Nombre con formato inválido
+    if (!isValidName(nombre)) {
+      setFieldError(inputNombre, true);
+      if (inputNombre) inputNombre.focus();
+      live.textContent = "Ingresá un nombre válido (sólo letras, mínimo 2 caracteres).";
+      return;
     }
 
     // Email con formato inválido
