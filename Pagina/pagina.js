@@ -411,6 +411,7 @@ function initContact() {
     setFieldError(inputMensaje, false);
 
     /* Validaciones del forms antes de enviar (live.textContent sirve unicamente de accesibilidad)*/
+    /* Uso alert () unicamente para el brief vacio porque para el resto queda mas claro con el borde rojo de alerta, pero para este no quedaba tan claro */
 
     // Nombre / Email faltantes
     const faltanNombre = !nombre;
