@@ -463,7 +463,7 @@ function initContact() {
 
     // Brief vacío
     if (Array.isArray(briefSnapshot) && briefSnapshot.length === 0) {
-      live.textContent = "Agregá al menos un servicio a tu solicitud.";
+      alert("Agregá al menos un servicio a tu solicitud antes de enviar.");
       return;
     }
 
