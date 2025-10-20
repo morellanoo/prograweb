@@ -3,13 +3,6 @@
 function byId(id) {
   return document.getElementById(id);
 }
-// querySelector y querySelectorAll
-function q(sel, el = document) {
-  return el.querySelector(sel);
-}
-function qa(sel, el = document) {
-  return Array.from(el.querySelectorAll(sel));
-}
 
 /* Acceso local */
 const STORAGE_KEY = "bshopper:brief";
