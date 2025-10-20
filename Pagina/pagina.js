@@ -411,6 +411,144 @@ function renderSentSummary(items, rawJson) {
   try { box.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (_) { }
 }
 
+/* EmailJS */
+// Leo template desde el form de contacto cuando se envia y valido
+function getEmailConfig() {
+  var f = document.getElementById("contact-form");
+  var SERVICE_ID = f ? (f.dataset.emailjsService || "") : "";
+  var TEMPLATE_ID = f ? (f.dataset.emailjsTemplate || "") : "";
+  var PUBLIC_KEY = "_v0uEUNkflsV7pfGo"; // mi public key de EmailJS
+  if (!SERVICE_ID || !TEMPLATE_ID) {
+    throw new Error("Falta configurar SERVICE_ID o TEMPLATE_ID en el form (data-emailjs-*)");
+  }
+  return { SERVICE_ID, TEMPLATE_ID, PUBLIC_KEY };
+}
+
+// Inicializa con PUBLIC_KEY y envía con validación explícita
+function sendEmailJS(params) {
+  return new Promise(function (resolve, reject) {
+    try {
+      var cfg = getEmailConfig();
+      if (!window.emailjs || !window.emailjs.init || !window.emailjs.send) {
+        return reject(new Error('EmailJS SDK no cargó. Verificá <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script> en <head>.'));
+      }
+      window.emailjs.init(cfg.PUBLIC_KEY);
+      window.emailjs
+        .send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, params)
+        .then(resolve)
+        .catch(reject);
+    } catch (cfgErr) {
+      reject(cfgErr);
+    }
+  });
+}
+
+// Inicializo manejo del form de contacto
+function initContact() {
+  const form = byId("contact-form");
+  const live = byId("live");
+  if (!form || !live) return;
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const data = new FormData(form);
+    const nombre = String(data.get("nombre") || "").trim();
+    const email = String(data.get("email") || "").trim();
+    const mensaje = String(data.get("mensaje") || "").trim();
+
+    const inputNombre = byId("input-nombre");
+    const inputEmail = byId("input-email");
+    const inputMensaje = byId("input-mensaje");
+
+    // Tomo el JSON del brief desde el textarea oculto
+    const briefJson = byId("brief-payload") ? byId("brief-payload").value : "[]";
+    let briefText;
+    let briefSnapshot = []; // snapshot para mostrar post-envío
+
+    try {
+      const parsed = JSON.parse(briefJson);
+      briefSnapshot = Array.isArray(parsed) ? parsed.slice() : []; // copia
+      briefText = summarizeBrief(parsed);
+    } catch (_) {
+      briefText = "No se pudo leer el brief.";
+    }
+
+    // Limpio estados previos de error
+    setFieldError(inputNombre, false);
+    setFieldError(inputEmail, false);
+    setFieldError(inputMensaje, false);
+
+    /* Validaciones del forms antes de enviar */
+    if (Array.isArray(briefSnapshot) && briefSnapshot.length === 0) {
+      live.textContent = "Agregá al menos un servicio a tu solicitud.";
+      return;
+    }
+    const faltanNombre = !nombre;
+    const faltanEmail = !email;
+
+    if (faltanNombre && faltanEmail) {
+      setFieldError(inputNombre, true);
+      setFieldError(inputEmail, true);
+      if (inputNombre) inputNombre.focus();
+      live.textContent = "Completá nombre y email.";
+      return;
+    }
+    if (faltanNombre) {
+      setFieldError(inputNombre, true);
+      if (inputNombre) inputNombre.focus();
+      live.textContent = "Completá el nombre.";
+      return;
+    }
+    if (faltanEmail) {
+      setFieldError(inputEmail, true);
+      if (inputEmail) inputEmail.focus();
+      live.textContent = "Completá el email.";
+      return;
+    }
+    if (!isValidName(nombre)) {
+      setFieldError(inputNombre, true);
+      if (inputNombre) inputNombre.focus();
+      live.textContent = "Ingresá un nombre válido (sólo letras, mínimo 2 caracteres).";
+      return;
+    }
+    if (!isValidEmail(email)) {
+      setFieldError(inputEmail, true);
+      if (inputEmail) inputEmail.focus();
+      live.textContent = "Ingresá un email válido (ej: nombre@dominio.com).";
+      return;
+    }
+    if (!mensaje) {
+      setFieldError(inputMensaje, true);
+      if (inputMensaje) inputMensaje.focus();
+      live.textContent = "Escribí un mensaje.";
+      return;
+    }
+
+    // Envío real con EmailJS 
+    sendEmailJS({
+      nombre: nombre,
+      email: email,
+      mensaje: mensaje,
+      brief_text: briefText,
+      brief_json: briefJson
+    })
+      .then(function () {
+        console.log("[OK EmailJS] Envío exitoso, pintando resumen.");
+        renderSentSummary(briefSnapshot, briefJson);
+        form.reset();
+        live.textContent = "¡Gracias! Mensaje enviado correctamente!";
+        setTimeout(function () { live.textContent = ""; }, 3000);
+      })
+      .catch(function (err) {
+        console.error("EmailJS error:", err);
+        live.textContent = "No pudimos enviar tu mensaje. Probá de nuevo.";
+        setTimeout(function () { live.textContent = ""; }, 3000);
+      });
+  });
+}
+
+
 /* Cosas utiles */
 function announce(msg) {
   var live = byId("live");
