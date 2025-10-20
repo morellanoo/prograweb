@@ -30,21 +30,21 @@
 /* Elegi los colores en base al manual de la marca */
 :root {
   --brand: #003056;
-  /* Azul institucional (títulos, botones, subrayados) */
+  /* Azul institucional*/
   --accent: #FFDE17;
-  /* Amarillo (detalle, línea activa en nav) */
+  /* Amarillo */
   --text: #111;
-  /* Texto principal (contrastado) */
+  /* Texto principal*/
   --muted: #5b6670;
-  /* Texto secundario (explicaciones, intros) */
+  /* Texto secundario */
   --bg: #ffffff;
-  /* Fondo blanco (limpio y atemporal) */
+  /* Fondo blanco */
   --bg-alt: #f5f7f9;
-  /* Fondo alterno para secciones como Hero */
+  /* Fondo alterno para Hero */
   --border: #e1e6ea;
   /* Bordes finos y separadores */
   --danger: #c0392b;
-  /* Color para acciones destructivas (Eliminar) */
+  /* Color para eliminar */
 
   /* Especifico tipografías */
   /* Las tipografias tambien estaban especificadas en el manual de la marca */
@@ -56,8 +56,7 @@
   /* Ancho máximo del contenido útil */
   --radius: 12px;
   /* Redondeo homogéneo de tarjetas y campos */
-  --shadow: 0 8px 22px rgba(0, 0, 0, .08);
-  /* Sombra */
+
 
   /* Escala tipográfica (coherente con manual) */
   --h1: clamp(32px, 5vw, 52px);
@@ -237,7 +236,6 @@ header {
     background: #fff;
     border: 1px solid var(--border);
     border-radius: 12px;
-    box-shadow: var(--shadow);
     padding: 12px;
     margin: 0;
     display: flex;
@@ -423,8 +421,7 @@ section {
 }
 
 
-/*  Grids genéricas */
-/* Grids reutilizables para services/cases. Ajusto columnas por breakpoint. */
+/*  Grids  */
 .grid {
   display: grid;
   gap: 20px
@@ -454,13 +451,12 @@ section {
   }
 }
 
-/* Cards de servicio */
+/* Cards */
 .service-card {
   background: #fff;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 20px;
-  box-shadow: var(--shadow);
   display: grid;
   align-content: start;
   gap: 10px;
@@ -485,7 +481,6 @@ section {
   background: #fff;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
   padding: 18px;
 }
 
@@ -593,7 +588,6 @@ section {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 18px;
-  box-shadow: var(--shadow);
 }
 
 /* foto */
@@ -683,7 +677,6 @@ section {
   #nosotras .team {
     grid-template-columns: 1fr;
   }
-
   #nosotras .member img {
     aspect-ratio: 4 / 3;
   }
@@ -700,7 +693,6 @@ section {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 18px;
-  box-shadow: var(--shadow);
 }
 
 .contact label {
@@ -717,11 +709,9 @@ section {
   background: #fff;
   outline: none;
 }
-
 .contact input:focus,
 .contact textarea:focus {
   border-color: var(--brand);
-  box-shadow: 0 0 0 3px rgba(0, 48, 86, .15);
   /* anillo de enfoque accesible */
 }
 
@@ -792,7 +782,6 @@ footer {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  box-shadow: var(--shadow);
   cursor: pointer;
   font-weight: 700;
 }

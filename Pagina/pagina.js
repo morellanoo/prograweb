@@ -3,10 +3,7 @@
 function byId(id) {
   return document.getElementById(id);
 }
-// querySelector y querySelectorAll
-function q(sel, el = document) {
-  return el.querySelector(sel);
-}
+// querySelectorAll (como Array)
 function qa(sel, el = document) {
   return Array.from(el.querySelectorAll(sel));
 }
@@ -89,13 +86,12 @@ function initUI() {
       closeNav();
     });
 
-    // se cierra al hacer click afuera del menu (mobile)
+    // se cierra al hacer click afuera del menu (mobile) — dejo SOLO pointerdown (no click)
     function outsideHandler(e) {
       if (nav.hidden) return;
       const inside = nav.contains(e.target) || btn.contains(e.target);
       if (!inside) closeNav();
     }
-    document.addEventListener("click", outsideHandler);
     document.addEventListener("pointerdown", outsideHandler);
 
     // cerrar con ESC
@@ -103,15 +99,18 @@ function initUI() {
       if (e.key === "Escape") closeNav();
     });
 
-    // se cierra si se scrollea (mobile)
-    window.addEventListener("scroll", function () {
-      if (!window.matchMedia("(max-width: 860px)").matches) return;
-      closeNav();
-    }, { passive: true });
+    // se cierra si se scrollea (mobile) — (lo pediste conservar)
+    window.addEventListener(
+      "scroll",
+      function () {
+        if (!window.matchMedia("(max-width: 860px)").matches) return;
+        closeNav();
+      },
+      { passive: true }
+    );
 
-    // sincronizar en resize
+    // sincronizar en resize + estado inicial (UNA sola llamada)
     window.addEventListener("resize", syncNavVisibilityToViewport);
-    // estado inicial
     syncNavVisibilityToViewport();
   }
 
@@ -383,7 +382,6 @@ function summarizeBrief(items) {
 function renderSentSummary(items, rawJson) {
   var box = byId("sent-summary");
   var list = byId("sent-summary-list");
-  var preEl = byId("sent-summary-json");
   if (!box || !list) return;
 
   list.innerHTML = "";
@@ -408,148 +406,9 @@ function renderSentSummary(items, rawJson) {
     });
   }
 
-  if (preEl) preEl.textContent = rawJson || "[]";
   box.hidden = false;
 
   try { box.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (_) { }
-}
-
-// Inicializo manejo del form de contacto
-function initContact() {
-  const form = byId("contact-form");
-  const live = byId("live");
-  if (!form || !live) return;
-
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const data = new FormData(form);
-    const nombre = String(data.get("nombre") || "").trim();
-    const email = String(data.get("email") || "").trim();
-    const mensaje = String(data.get("mensaje") || "").trim();
-
-    const inputNombre = byId("input-nombre");
-    const inputEmail = byId("input-email");
-    const inputMensaje = byId("input-mensaje");
-
-    // Tomo el JSON del brief desde el textarea oculto
-    const briefJson = byId("brief-payload") ? byId("brief-payload").value : "[]";
-    let briefText;
-    let briefSnapshot = []; // snapshot para mostrar post-envío
-
-    try {
-      const parsed = JSON.parse(briefJson);
-      briefSnapshot = Array.isArray(parsed) ? parsed.slice() : []; // copia
-      briefText = summarizeBrief(parsed);
-    } catch (_) {
-      briefText = "No se pudo leer el brief.";
-    }
-
-    // Limpio estados previos de error
-    setFieldError(inputNombre, false);
-    setFieldError(inputEmail, false);
-    setFieldError(inputMensaje, false);
-
-    /* Validaciones del forms antes de enviar (live.textContent sirve unicamente de accesibilidad)*/
-
-    // Brief vacío
-    if (Array.isArray(briefSnapshot) && briefSnapshot.length === 0) {
-      live.textContent = "Agregá al menos un servicio a tu solicitud.";
-      return;
-    }
-
-    // Nombre / Email faltantes
-    const faltanNombre = !nombre;
-    const faltanEmail = !email;
-
-    if (faltanNombre && faltanEmail) {
-      setFieldError(inputNombre, true);
-      setFieldError(inputEmail, true);
-      if (inputNombre) inputNombre.focus();
-      live.textContent = "Completá nombre y email.";
-      return;
-    }
-
-    if (faltanNombre) {
-      setFieldError(inputNombre, true);
-      if (inputNombre) inputNombre.focus();
-      live.textContent = "Completá el nombre.";
-      return;
-    }
-
-    if (faltanEmail) {
-      setFieldError(inputEmail, true);
-      if (inputEmail) inputEmail.focus();
-      live.textContent = "Completá el email.";
-      return;
-    }
-    //  Nombre con formato inválido
-    if (!isValidName(nombre)) {
-      setFieldError(inputNombre, true);
-      if (inputNombre) inputNombre.focus();
-      live.textContent = "Ingresá un nombre válido (sólo letras, mínimo 2 caracteres).";
-      return;
-    }
-
-    // Email con formato inválido
-    if (!isValidEmail(email)) {
-      setFieldError(inputEmail, true);
-      if (inputEmail) inputEmail.focus();
-      live.textContent = "Ingresá un email válido (ej: nombre@dominio.com).";
-      return;
-    }
-
-    // Mensaje vacío
-    if (!mensaje) {
-      setFieldError(inputMensaje, true);
-      if (inputMensaje) inputMensaje.focus();
-      live.textContent = "Escribí un mensaje.";
-      return;
-    }
-
-    // Envío real con EmailJS 
-    sendEmailJS({
-      nombre: nombre,
-      email: email,
-      mensaje: mensaje,
-      brief_text: briefText,
-      brief_json: briefJson
-    })
-      .then(function () {
-        console.log("[OK EmailJS] Envío exitoso, pintando resumen.");
-        renderSentSummary(briefSnapshot, briefJson);
-        form.reset();
-        live.textContent = "¡Gracias! Mensaje enviado correctamente.";
-        setTimeout(function () { live.textContent = ""; }, 3000);
-      })
-      .catch(function (err) {
-        console.error("EmailJS error:", err);
-        live.textContent = "No pudimos enviar tu mensaje. Probá de nuevo.";
-        setTimeout(function () { live.textContent = ""; }, 3000);
-      });
-  });
-}
-
-// Inicializa con PUBLIC_KEY y envía con validación explícita
-function sendEmailJS(params) {
-  return new Promise(function (resolve, reject) {
-    try {
-      var cfg = getEmailConfig();
-
-      if (!window.emailjs || !window.emailjs.init || !window.emailjs.send) {
-        return reject(new Error('EmailJS SDK no cargó. Verificá <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script> en <head>.'));
-      }
-
-      window.emailjs.init(cfg.PUBLIC_KEY);
-      window.emailjs
-        .send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, params)
-        .then(resolve)
-        .catch(reject);
-
-    } catch (cfgErr) {
-      reject(cfgErr);
-    }
-  });
 }
 
 /* Cosas utiles */
