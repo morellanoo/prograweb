@@ -247,18 +247,20 @@ function bindServiceButtons() {
 }
 
 /* EmailJS */
-// Leo service/template desde el form de contacto
-var EMAILJS_CONFIG = {
-  SERVICE_ID: (function () {
-    var f = document.getElementById("contact-form");
-    return f ? f.dataset.emailjsService || "" : "";
-  })(),
-  TEMPLATE_ID: (function () {
-    var f = document.getElementById("contact-form");
-    return f ? f.dataset.emailjsTemplate || "" : "";
-  })(),
-  PUBLIC_KEY: "_v0uEUNkflsV7pfGo", // mi public key de EmailJS
-};
+// Leo service/template desde el form de contacto **cuando envío** y valido
+function getEmailConfig() {
+  // Leo service/template desde el form de contacto
+  var f = document.getElementById("contact-form");
+  var SERVICE_ID = f ? (f.dataset.emailjsService || "") : "";
+  var TEMPLATE_ID = f ? (f.dataset.emailjsTemplate || "") : "";
+  var PUBLIC_KEY = "_v0uEUNkflsV7pfGo"; // mi public key de EmailJS
+
+  if (!SERVICE_ID || !TEMPLATE_ID) {
+    // Error explícito si hay un typo o falta algún data-*
+    throw new Error("Falta configurar SERVICE_ID o TEMPLATE_ID en el form (data-emailjs-*)");
+  }
+  return { SERVICE_ID, TEMPLATE_ID, PUBLIC_KEY };
+}
 
 // Helpers
 function summarizeBrief(items) {
@@ -329,7 +331,7 @@ function renderSentSummary(items, rawJson) {
   // lo llevo a la vista para feedback inmediato
   try {
     box.scrollIntoView({ behavior: "smooth", block: "start" });
-  } catch (_) {}
+  } catch (_) { }
 }
 
 // Inicializo manejo del form de contacto
@@ -380,6 +382,7 @@ function initContact() {
       brief_json: briefJson,
     })
       .then(function () {
+        console.log("[OK EmailJS] Envío exitoso, pintando resumen.");
         renderSentSummary(briefSnapshot, briefJson);
         form.reset();
         live.textContent = "¡Gracias! Mensaje enviado correctamente.";
@@ -397,24 +400,25 @@ function initContact() {
   });
 }
 
-// Inicializa con PUBLIC_KEY y envía.
+// Inicializa con PUBLIC_KEY y envía con validación explícita
 function sendEmailJS(params) {
   return new Promise(function (resolve, reject) {
-    function doSend() {
-      window.emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+    try {
+      var cfg = getEmailConfig(); // leo/valido config desde el DOM
+
+      // SDK debe estar disponible (lo cargamos fijo en <head>)
+      if (!window.emailjs || !window.emailjs.init || !window.emailjs.send) {
+        return reject(new Error('EmailJS SDK no cargó. Verificá <script src="...email.min.js"></script> en <head>.'));
+      }
+
+      window.emailjs.init(cfg.PUBLIC_KEY);
       window.emailjs
-        .send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, params)
+        .send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, params)
         .then(resolve)
         .catch(reject);
-    }
-    if (!window.emailjs) {
-      var s = document.createElement("script");
-      s.src = "https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js";
-      s.onload = doSend;
-      s.onerror = reject;
-      document.head.appendChild(s);
-    } else {
-      doSend();
+
+    } catch (cfgErr) {
+      reject(cfgErr);
     }
   });
 }
