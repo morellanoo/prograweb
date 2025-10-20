@@ -47,7 +47,7 @@
   --danger: #c0392b;
   /* Color para acciones destructivas (Eliminar) */
 
-/* Tipografías */
+/* Especifico tipografías */
 /* Las tipografias tambien estaban especificadas en el manual de la marca */
 
   --font-title: "Bodoni72", "Bodoni", "Didot", "Georgia", serif;
@@ -67,7 +67,7 @@
   --lead: clamp(16px, 2.2vw, 20px);
 }
 
-/* Reset y utilidades */
+/* Utilidades */
 * {
   box-sizing: border-box
 }
@@ -122,7 +122,7 @@ a:hover {
   overflow: hidden;
 }
 
-/* Tipografía base  */
+/* Tipografía base */
 /* Títulos en Bodoni (marca) y párrafos en Gotham (cuerpo). */
 h1,
 h2,
@@ -288,33 +288,86 @@ section {
 }
 
 /* HERO: uso un fondo alterno sólido para separar visualmente la portada */
-#hero {
-  background: var(--bg-alt)
+
+.hero--flat{
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--border);
+  padding: clamp(40px, 8vw, 96px) 0;
 }
 
-.hero__inner {
+/* Contenido en columna */
+.hero__inner{
   display: grid;
-  grid-template-columns: 1.1fr .9fr;
-  gap: 32px;
-  align-items: center;
+  gap: clamp(10px, 2.4vw, 18px);
+  align-content: start;
 }
 
-.hero__copy p {
-  max-width: 52ch
+/* H1 en Bodoni + subrayado amarillo de marca */
+.hero__title{
+  margin: 0;
+  font-family: var(--font-title);
+  color: var(--brand);
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  line-height: 1.03;
+  font-size: clamp(28px, 6.6vw, 68px);
+  position: relative;
+}
+.hero__title::after{
+  content:"";
+  display:block;
+  margin-top:.45em;
+  width:min(520px, 60%);
+  height:6px;
+  background: var(--accent);
+  border-radius: 6px;
 }
 
-/* Limito el ancho de texto para que se lea mejor */
-.hero__media {
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: var(--shadow)
+/* Subtitulo */
+.hero__sub{
+  margin:.1em 0 0;
+  font-family: var(--font-sans);
+  color: var(--brand);
+  font-weight:600;
+  letter-spacing:.2px;
+  line-height:1.15;
+  font-size: clamp(18px, 3.2vw, 30px);
 }
 
-@media (max-width: 900px) {
-  .hero__inner {
-    grid-template-columns: 1fr;
-  }
+/* Badge amarillo */
+.hero__badge{
+  display:inline-block;
+  margin-top:.1em;
+  font-family: var(--font-sans);
+  font-weight:700;
+  color: var(--brand);
+  background: var(--accent);
+  padding:.45em .8em;
+  border-radius:999px;
+  line-height:1;
+  font-size: clamp(13px, 1.8vw, 16px);
 }
+
+/* Lead */
+.hero__lead{
+  margin:.3em 0 0;
+  color:#415261;
+  font-size: clamp(15px, 2.2vw, 20px);
+  max-width: 62ch;
+}
+
+/* Referencia a servicios */
+.hero__actions{ margin-top: clamp(12px, 2.2vw, 18px); }
+.btn-cta--secondary{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:8px; text-decoration:none; font-family:var(--font-sans); font-weight:700;
+  color:var(--brand); background:transparent; border:2px solid var(--brand);
+  border-radius:999px; padding:.7em 1.1em;
+  transition: background .15s ease;
+}
+.btn-cta--secondary:hover{ background: rgba(0,48,86,.08); }
+.btn-cta--secondary:focus{ outline:3px solid rgba(0,48,86,.25); outline-offset:2px; }
+
 
 /*  Grids genéricas */
 /* Grids reutilizables para services/cases. Ajusto columnas por breakpoint. */
@@ -485,49 +538,115 @@ section {
 }
 
 /*  Team  */
-.team {
-  display: grid;
-  gap: 18px
+
+/* grid de las tarjetas: dos columnas en desktop, una en mobile */
+#nosotras .team{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 24px;
 }
 
-.member {
-  display: grid;
-  grid-template-columns: 96px 1fr;
+/* tarjeta */
+#nosotras .member{
+  display:grid;
+  grid-template-columns: 1fr;
   gap: 14px;
-  align-items: center;
-  background: #fff;
-  border: 1px solid var(--border);
+  align-content:start;
+  background:#fff;
+  border:1px solid var(--border);
   border-radius: var(--radius);
-  padding: 12px;
+  padding: 18px;
   box-shadow: var(--shadow);
 }
 
-.member img {
-  width: 96px;
-  height: 96px;
+/* foto */
+#nosotras .member img{
+  width: 100%;
+  aspect-ratio: 13 / 9; 
+  height: auto;
   object-fit: cover;
-  border-radius: 10px
+  object-position: center 20%; 
+  border-radius: 12px;
 }
 
-.member h3 {
-  margin: 0 0 2px
+/* cuerpo */
+#nosotras .member__body{
+  display:grid;
+  gap: 6px;
 }
 
-.member p {
-  margin: 0;
-  color: var(--muted)
+/* nombre */
+#nosotras .member__name{
+  margin:0 0 2px;
+  font-family: var(--font-title);
+  color: var(--brand);
+  font-size: clamp(18px, 1.9vw, 24px);
+  line-height: 1.15;
 }
 
-@media (max-width:580px) {
-  .member {
-    grid-template-columns: 72px 1fr
+/* cargo */
+#nosotras .member__role{
+  margin:0 0 8px;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing:.2px;
+}
+
+/* bio */
+#nosotras .member__bio{
+  margin:0;
+  color: var(--muted);
+}
+
+/* subtítulos  */
+#nosotras .member__section{
+  margin: 10px 0 6px;
+  font-size: clamp(14px, 1.6vw, 16px);
+  font-weight: 700;
+  color: var(--brand);
+}
+
+/* separador */
+#nosotras .member__divider{
+  border:0;
+  border-top:1px solid var(--border);
+  margin: 8px 0 10px;
+}
+
+/* Citas */
+#nosotras .member__quote{
+  margin: 8px 0 0;
+  color: var(--text);
+  font-style: italic;
+}
+
+/* link a LinkedIn */
+#nosotras .member__links{
+  margin-top:10px;
+}
+#nosotras .member__linkedin{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  color: var(--brand);
+  font-weight:600;
+  text-decoration:none;
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:8px 12px;
+}
+#nosotras .member__linkedin:hover{
+  background:#f2f6f9;
+}
+
+/* Apilo a 1 columna en pantallas chicas */
+@media (max-width: 900px){
+  #nosotras .team{ grid-template-columns: 1fr; }
+  #nosotras .member img{
+    aspect-ratio: 4 / 3; 
   }
-
-  .member img {
-    width: 72px;
-    height: 72px
-  }
 }
+
 
 /*  Contacto  */
 /* Form en grid de 2 columnas (desktop) y 1 columna (mobile). */

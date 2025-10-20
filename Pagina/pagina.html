@@ -12,10 +12,10 @@
 
     <link rel="stylesheet" href="pagina.css" /> <!-- CSS principal -->
 
-    <!-- SDK EmailJS (carga fija para evitar problemas del loader dinámico) -->
+    <!-- SDK EmailJS -->
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
-    <!-- Referencio JS propio -->
+    <!-- Referencio JS -->
     <script src="pagina.js" defer></script>
 </head>
 
@@ -32,7 +32,7 @@
             <button id="menu-toggle" class="nav-toggle" aria-expanded="false" aria-controls="site-nav"
                 aria-label="Abrir menú">☰</button> <!-- Botón de menú mobile-->
 
-            <!-- Menú principal del sitio. En mobile arranca oculto (hidden) y JS lo alterna. En desktop es un inline nav común. Mantengo enlaces ancla (#seccion) -->
+            <!-- Menú principal del sitio. En mobile arranca oculto y JS lo alterna. En desktop es un inline nav común. Mantengo enlaces ancla (#seccion) -->
             <nav id="site-nav" class="nav" hidden> <!-- Nav principal -->
                 <a href="#inicio">Inicio</a>
                 <a href="#servicios">Servicios</a>
@@ -45,20 +45,31 @@
     </header>
 
     <main>
-        <!-- Hero (portada)-->
-        <section id="hero" aria-labelledby="hero-title">
+
+        <!-- Hero (portada) -->
+        <section id="hero" class="hero--flat" aria-labelledby="hero-title">
             <div class="container hero__inner">
-                <div class="hero__copy">
-                    <h1 id="hero-title">Smart Research<br />para decisiones claras</h1>
-                    <p class="lead">Diseñamos y ejecutamos investigación a medida. Armá tu brief y conversemos.</p>
-                    <p><a class="btn cta" href="#servicios">Ver servicios</a></p>
-                </div>
-                <figure class="hero__media">
-                    <!-- Foto de stock -->
-                    <img src="fotos/iStock-508555286.jpg" alt="Imagen representativa de investigación e insights" />
-                </figure>
+                <!-- H1: marca -->
+                <h1 id="hero-title" class="hero__title">SOMOS SMART RESEARCH</h1>
+
+                <!-- H2: experiencia -->
+                <p class="hero__sub">Con 20 años de experiencia en investigación de mercado</p>
+
+                <!-- Badge amarillo de marca -->
+                <span class="hero__badge" aria-label="Somos Expertas en Shopper">Somos Expertas en Shopper</span>
+
+                <!-- Lead -->
+                <p class="hero__lead">
+                    Diseñamos y ejecutamos investigación a medida. Armá tu brief y conversemos.
+                </p>
+
+                <!-- Referencia a servicios -->
+                <p class="hero__actions">
+                    <a href="#servicios" class="btn-cta--secondary">Ver servicios</a>
+                </p>
             </div>
         </section>
+
 
         <!-- Servicios -->
         <!-- Armo el "catalogo" de servicios con cards. Cada card tiene un botón “Agregar a mi solicitud”. Ese botón dispara el CRUD del “Brief Builder”-->
@@ -151,30 +162,67 @@
             </div>
         </section>
 
-        <!-- Nosotras  -->
+        <!--  NOSOTRAS  -->
+        <!-- Dos tarjetas en grilla -->
         <section id="nosotras" aria-labelledby="nosotras-title">
             <div class="container">
                 <h2 id="nosotras-title">Nosotras</h2>
+
+                <!-- Grilla 2 columnas -->
                 <div class="team">
-                    <article class="member">
-                        <img src="fotos/Mariana.jpg" alt="Nombre Apellido — Research Lead" />
-                        <div>
-                            <h3>Nombre Apellido</h3>
-                            <p>Research Lead. Metodologías mixtas, datos accionables.</p>
+
+                    <!-- Mariana Rossi -->
+                    <article class="member member--card">
+                        <img class="member__photo" src="fotos/Mariana.jpg" alt="Mariana Rossi — Directora & Partner" />
+                        <div class="member__body">
+                            <p class="member__name">MARIANA ROSSI</p>
+                            <p class="member__role">Directora &amp; Partner</p>
+                            <hr class="member__divider" aria-hidden="true" />
+                            <h3 class="member__section">LA MIRADA PARA LA ACCIÓN</h3>
+                            <p>Licenciada en Marketing (UADE). Desarrollo profesional en Ipsos (9 años); Kantar
+                                Worldpanel (6 años) y CCR (9 años).</p>
+                            <p>Apasionada por el servicio al cliente.</p>
+                            <blockquote class="member__quote">
+                                “Trabajar mano a mano con el cliente para buscar nuevas maneras de seducir al SHOPPER en
+                                su camino a la compra”
+                            </blockquote>
+                            <!-- Link a LinkedIn  -->
+                            <p class="member__links">
+                                <a class="btn-ghost" href="https://www.linkedin.com/in/mariana-rossi-13255811/"
+                                    target="_blank" rel="noopener">LinkedIn</a>
+                            </p>
                         </div>
                     </article>
-                    <article class="member">
-                        <img src="fotos/Camila.jpg" alt="Nombre Apellido — Project Manager" />
-                        <div>
-                            <h3>Nombre Apellido</h3>
-                            <p>Project Manager. Logística de campo y calidad de datos.</p>
+
+                    <!-- Camila Fischer -->
+                    <article class="member member--card">
+                        <img class="member__photo" src="fotos/Camila.jpg" alt="Camila Fischer — Directora & Partner" />
+
+                        <div class="member__body">
+                            <p class="member__name">CAMILA FISCHER</p>
+                            <p class="member__role">Directora &amp; Partner</p>
+                            <hr class="member__divider" aria-hidden="true" />
+                            <h3 class="member__section">LA MIRADA ESTRATÉGICA</h3>
+                            <p>Licenciada en Sociología (UBA), Desarrollo Profesional en Ipsos (9 años); Navarro MKT
+                                Research (10 años).</p>
+                            <p>Fuerte vocación por el análisis profundo.</p>
+                            <blockquote class="member__quote">
+                                “Comprender de manera profunda al shopper y encontrar los insights que permitan generar
+                                propuestas accionables y eficaces para el negocio”
+                            </blockquote>
+                            <!-- Link a LinkedIn  -->
+                            <p class="member__links">
+                                <a class="btn-ghost" href="https://www.linkedin.com/in/camilafischer/" target="_blank"
+                                    rel="noopener">LinkedIn</a>
+                            </p>
                         </div>
                     </article>
+
                 </div>
             </div>
         </section>
 
-        <!-- Contacto -->
+        <!--  CONTACTO  -->
         <section id="contacto" aria-labelledby="contacto-title">
             <div class="container">
                 <h2 id="contacto-title">Contactanos</h2>
@@ -187,7 +235,7 @@
                     </label>
                     <label>
                         <span>Email</span>
-                        <!-- type=email + inputmode + autocomplete para UX/validación nativa -->
+                        <!-- type=email validación nativa -->
                         <input type="email" name="email" id="input-email" required inputmode="email"
                             autocomplete="email" />
                     </label>
@@ -205,18 +253,11 @@
                     </div>
                 </form>
 
-                <!-- Resumen de lo que se envió (legible; el JSON es opcional) -->
+                <!-- Resumen de lo que se envió -->
                 <div id="sent-summary" class="panel" hidden>
                     <h3>Solicitud enviada</h3>
                     <p class="section-intro">Estos son los ítems que recibimos con tu consulta:</p>
                     <ul id="sent-summary-list" class="brief-list"></ul>
-
-                    <!-- Si querés, podés incluir este bloque para ver el JSON:
-                    <details>
-                        <summary>Ver JSON enviado</summary>
-                        <pre id="sent-summary-json" style="white-space:pre-wrap;"></pre>
-                    </details>
-                    -->
                 </div>
 
             </div>
@@ -228,8 +269,7 @@
         <div class="container footer__inner">
             <small>© <span id="year"></span> b-Shopper — Smart Research</small>
             <ul class="social">
-                <li><a href="#" aria-label="LinkedIn">LinkedIn</a></li>
-                <li><a href="#" aria-label="Email">Email</a></li>
+                <li><a href="https://www.linkedin.com/company/b-shopper/" aria-label="LinkedIn">LinkedIn</a></li>
             </ul>
         </div>
     </footer>

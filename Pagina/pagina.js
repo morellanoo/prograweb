@@ -361,7 +361,7 @@ function initContact() {
     setFieldError(inputEmail, false);
     setFieldError(inputMensaje, false);
 
-    /* Validaciones del forms antes de enviar */
+    /* Validaciones del forms antes de enviar (live.textContent sirve unicamente de accesibilidad)*/
 
     // Brief vacío
     if (Array.isArray(briefSnapshot) && briefSnapshot.length === 0) {
