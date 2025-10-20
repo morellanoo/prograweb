@@ -40,12 +40,79 @@ function initUI() {
   // Menú mobile toggle
   const btn = byId("menu-toggle");
   const nav = byId("site-nav");
-  if (btn && nav) {
-    btn.addEventListener("click", function () {
+
+  function openNav() {
+    if (!btn || !nav) return;
+    btn.setAttribute("aria-expanded", "true");
+    nav.hidden = false;
+  }
+  function closeNav() {
+    if (!btn || !nav) return;
+    btn.setAttribute("aria-expanded", "false");
+    // En mobile lo oculto; en desktop debe quedar visible
+    if (window.matchMedia("(max-width: 860px)").matches) {
+      nav.hidden = true;
+    } else {
+      nav.hidden = false;
+    }
+  }
+  function toggleNav() {
+    const expanded = btn && btn.getAttribute("aria-expanded") === "true";
+    expanded ? closeNav() : openNav();
+  }
+
+  // Visibilidad nav según (mobile vs desktop)
+  function syncNavVisibilityToViewport() {
+    if (!btn || !nav) return;
+    if (window.matchMedia("(max-width: 860px)").matches) {
+      // mobile: oculto salvo que esté expandido
       const expanded = btn.getAttribute("aria-expanded") === "true";
-      btn.setAttribute("aria-expanded", String(!expanded));
-      nav.hidden = expanded;
+      nav.hidden = !expanded;
+    } else {
+      // desktop: siempre visible y colapso el estado del botón
+      nav.hidden = false;
+      btn.setAttribute("aria-expanded", "false");
+    }
+  }
+
+  if (btn && nav) {
+    // toggle con el botón
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      toggleNav();
     });
+
+    // se cierra al hacer click en un link del menu (mobile)
+    nav.addEventListener("click", function (e) {
+      const a = e.target.closest("a");
+      if (!a) return;
+      closeNav();
+    });
+
+    // se cierra al hacer click afuera del menu (mobile)
+    function outsideHandler(e) {
+      if (nav.hidden) return;
+      const inside = nav.contains(e.target) || btn.contains(e.target);
+      if (!inside) closeNav();
+    }
+    document.addEventListener("click", outsideHandler);
+    document.addEventListener("pointerdown", outsideHandler);
+
+    // cerrar con ESC
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeNav();
+    });
+
+    // se cierra si se scrollea (mobile)
+    window.addEventListener("scroll", function () {
+      if (!window.matchMedia("(max-width: 860px)").matches) return;
+      closeNav();
+    }, { passive: true });
+
+    // sincronizar en resize
+    window.addEventListener("resize", syncNavVisibilityToViewport);
+    // estado inicial
+    syncNavVisibilityToViewport();
   }
 
   // Scroll a secciones (#id)
@@ -75,17 +142,39 @@ function initUI() {
     });
   }
 
-  // Resaltado de link activo según el hash actual
-  function highlight() {
-    const hash = location.hash || "#inicio";
-    qa("#site-nav a").forEach(function (a) {
-      const active = a.getAttribute("href") === hash;
-      a.dataset.active = active ? "true" : "false";
+  // Resaltado del link activo según sección visible
+  const navLinks = qa("#site-nav a");
+  const sections = qa("main section[id]");
+
+  function setActive(hash) {
+    navLinks.forEach(function (a) {
+      a.dataset.active = (a.getAttribute("href") === hash) ? "true" : "false";
     });
   }
-  window.addEventListener("hashchange", highlight);
-  highlight();
+  setActive(location.hash || "#inicio"); // estado inicial: si no hay hashtag, apunto a #inicio
+
+  // al cambiar el hashtag manualmente
+  window.addEventListener("hashchange", function () {
+    setActive(location.hash || "#inicio");
+  });
+
+  // observer para actualizar por scroll
+  try {
+    const obs = new IntersectionObserver(function (entries) {
+      const visible = entries  // tomo la sección más visible
+        .filter(function (en) { return en.isIntersecting; })
+        .sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; })[0];
+      if (!visible) return;
+      const hash = "#" + visible.target.id;
+      setActive(hash);
+    }, { rootMargin: "-20% 0px -60% 0px", threshold: [0.25, 0.5, 0.75] });
+
+    sections.forEach(function (sec) { obs.observe(sec); });
+  } catch (_) {
+    // fallback: si IntersectionObserver no está, me quedo con el hash
+  }
 }
+
 
 /* Brief UI */
 // Dibuja la lista, contador y el JSON oculto para EmailJS
