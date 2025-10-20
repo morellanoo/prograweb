@@ -189,7 +189,7 @@ header {
 /* Botón de hamburguesa (mobile) */
 .nav-toggle {
   font: inherit;
-  border: 1px solid var(--border);
+  border: 2px solid var(--accent);
   background: #fff;
   border-radius: 8px;
   padding: 8px 10px;
@@ -234,7 +234,7 @@ header {
     right: 0;
     z-index: 1000;
     background: #fff;
-    border: 1px solid var(--border);
+    border: 2px solid var(--accent);
     border-radius: 12px;
     padding: 12px;
     margin: 0;
@@ -454,7 +454,7 @@ section {
 /* Cards */
 .service-card {
   background: #fff;
-  border: 1px solid var(--border);
+  border: 2px solid var(--accent);
   border-radius: var(--radius);
   padding: 20px;
   display: grid;
@@ -479,7 +479,7 @@ section {
 /* Contenedor del panel con sombra y bordes */
 .panel {
   background: #fff;
-  border: 1px solid var(--border);
+  border: 2px solid var(--accent);
   border-radius: var(--radius);
   padding: 18px;
 }
@@ -500,7 +500,7 @@ section {
 }
 
 .brief-item {
-  border: 1px solid var(--border);
+  border: 2px solid var(--accent);
   border-radius: 10px;
   padding: 12px;
   display: flex;
@@ -585,7 +585,7 @@ section {
   gap: 14px;
   align-content: start;
   background: #fff;
-  border: 1px solid var(--border);
+  border: 3px solid var(--accent);
   border-radius: var(--radius);
   padding: 18px;
 }
@@ -690,7 +690,7 @@ section {
   grid-template-columns: 1fr 1fr;
   gap: 14px;
   background: #fff;
-  border: 1px solid var(--border);
+  border: 3px solid var(--accent);
   border-radius: var(--radius);
   padding: 18px;
 }
@@ -776,7 +776,7 @@ footer {
   right: 18px;
   bottom: 18px;
   z-index: 30;
-  border: 1px solid var(--brand);
+  border: 2px solid var(--accent);
   background: #fff;
   color: var(--brand);
   width: 44px;
