@@ -584,6 +584,11 @@ section {
     grid-column: 1
   }
 }
+/* feedback visual */
+.is-invalid {
+  border-color: #c0392b !important;
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, .15) !important;
+}
 
 /*  Footer  */
 footer {

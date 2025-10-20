@@ -15,7 +15,7 @@
     <!-- SDK EmailJS (carga fija para evitar problemas del loader dinámico) -->
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
-    <!-- JS propio -->
+    <!-- Referencio JS propio -->
     <script src="pagina.js" defer></script>
 </head>
 
@@ -187,7 +187,9 @@
                     </label>
                     <label>
                         <span>Email</span>
-                        <input type="email" name="email" id="input-email" required />
+                        <!-- type=email + inputmode + autocomplete para UX/validación nativa -->
+                        <input type="email" name="email" id="input-email" required inputmode="email"
+                            autocomplete="email" />
                     </label>
                     <label>
                         <span>Empresa (opcional)</span>
@@ -203,15 +205,18 @@
                     </div>
                 </form>
 
-                <!-- Resumen de lo que se envió -->
+                <!-- Resumen de lo que se envió (legible; el JSON es opcional) -->
                 <div id="sent-summary" class="panel" hidden>
                     <h3>Solicitud enviada</h3>
                     <p class="section-intro">Estos son los ítems que recibimos con tu consulta:</p>
                     <ul id="sent-summary-list" class="brief-list"></ul>
+
+                    <!-- Si querés, podés incluir este bloque para ver el JSON:
                     <details>
                         <summary>Ver JSON enviado</summary>
                         <pre id="sent-summary-json" style="white-space:pre-wrap;"></pre>
                     </details>
+                    -->
                 </div>
 
             </div>

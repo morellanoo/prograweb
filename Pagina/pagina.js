@@ -3,7 +3,7 @@
 function byId(id) {
   return document.getElementById(id);
 }
-// querySelector y querySelectorAll con contenedor opcional.
+// querySelector y querySelectorAll
 function q(sel, el = document) {
   return el.querySelector(sel);
 }
@@ -89,7 +89,6 @@ function initUI() {
 
 /* Brief UI */
 // Dibuja la lista, contador y el JSON oculto para EmailJS
-
 function renderBrief() {
   const list = byId("brief-list");
   const empty = byId("brief-empty");
@@ -143,7 +142,7 @@ function renderBrief() {
   payload.value = JSON.stringify(briefState, null, 2);
 }
 
-// Agrega un servicio al brief
+// Agrega un servicio al brief 
 function addToBrief(data) {
   const item = {
     id: crypto.randomUUID(),
@@ -151,28 +150,23 @@ function addToBrief(data) {
     titulo: data.titulo,
     alcance: "",
     notas: "",
-    cantidad: 1,
+    cantidad: 1
   };
   briefState.push(item);
   storageSave(briefState);
   renderBrief();
-  announce("Se agregó “" + data.titulo + "” a tu solicitud.");
+  announce('Se agregó “' + data.titulo + '” a tu solicitud.');
 }
 
-// Edición de ítem
+// Edición de ítem 
 function editItem(id) {
-  const idx = briefState.findIndex(function (x) {
-    return x.id === id;
-  });
+  const idx = briefState.findIndex(function (x) { return x.id === id; });
   if (idx === -1) return;
 
   const current = briefState[idx];
   const cantIn = prompt("Cantidad (número entero):", current.cantidad);
-  const alcanceIn =
-    prompt("Alcance (descripción breve):", current.alcance || "") ||
-    current.alcance;
-  const notasIn =
-    prompt("Notas adicionales:", current.notas || "") || current.notas;
+  const alcanceIn = prompt("Alcance (descripción breve):", current.alcance || "") || current.alcance;
+  const notasIn = prompt("Notas adicionales:", current.notas || "") || current.notas;
 
   var cant = parseInt(cantIn, 10);
   if (!Number.isFinite(cant) || cant <= 0) cant = current.cantidad;
@@ -189,16 +183,14 @@ function editItem(id) {
 
 // Borrado con confirmación
 function deleteItem(id) {
-  const idx = briefState.findIndex(function (x) {
-    return x.id === id;
-  });
+  const idx = briefState.findIndex(function (x) { return x.id === id; });
   if (idx === -1) return;
   const titulo = briefState[idx].titulo;
-  if (!confirm("¿Eliminar “" + titulo + "” del brief?")) return;
+  if (!confirm('¿Eliminar “' + titulo + '” del brief?')) return;
   briefState.splice(idx, 1);
   storageSave(briefState);
   renderBrief();
-  announce("Se eliminó “" + titulo + "”.");
+  announce('Se eliminó “' + titulo + '”.');
 }
 
 // Vaciar todo el brief con confirmación
@@ -210,7 +202,7 @@ function clearBrief() {
   announce("Brief vacío.");
 }
 
-// Delego eventos del panel del brief.
+// Eventos del panel del brief
 function bindBriefEvents() {
   const list = byId("brief-list");
   const clearBtn = byId("brief-clear");
@@ -230,7 +222,7 @@ function bindBriefEvents() {
   if (clearBtn) clearBtn.addEventListener("click", clearBrief);
 }
 
-// Delego en la sección #servicios los clicks “Agregar a mi solicitud”
+// Sección #servicios los clicks “Agregar a mi solicitud”
 function bindServiceButtons() {
   const container = byId("servicios");
   if (!container) return;
@@ -247,54 +239,55 @@ function bindServiceButtons() {
 }
 
 /* EmailJS */
-// Leo service/template desde el form de contacto **cuando envío** y valido
+// Leo template desde el form de contacto cuando se envia y valido
 function getEmailConfig() {
-  // Leo service/template desde el form de contacto
+  // Leo template desde el form de contacto 
   var f = document.getElementById("contact-form");
   var SERVICE_ID = f ? (f.dataset.emailjsService || "") : "";
   var TEMPLATE_ID = f ? (f.dataset.emailjsTemplate || "") : "";
   var PUBLIC_KEY = "_v0uEUNkflsV7pfGo"; // mi public key de EmailJS
 
   if (!SERVICE_ID || !TEMPLATE_ID) {
-    // Error explícito si hay un typo o falta algún data-*
     throw new Error("Falta configurar SERVICE_ID o TEMPLATE_ID en el form (data-emailjs-*)");
   }
   return { SERVICE_ID, TEMPLATE_ID, PUBLIC_KEY };
 }
 
+/* Validaciones de form */
+// Valida formato básico de email
+function isValidEmail(str) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(str).trim());
+}
+// Marca/desmarca un campo como inválido para feedback
+function setFieldError(inputEl, hasError) {
+  if (!inputEl) return;
+  inputEl.setAttribute("aria-invalid", hasError ? "true" : "false");
+  if (hasError) inputEl.classList.add("is-invalid");
+  else inputEl.classList.remove("is-invalid");
+}
+
 // Helpers
 function summarizeBrief(items) {
   try {
-    if (!Array.isArray(items) || items.length === 0)
-      return "Sin ítems en el brief.";
-    return items
-      .map(function (it, i) {
-        var line1 =
-          i +
-          1 +
-          ") " +
-          (it.titulo || "Servicio") +
-          " (Cant: " +
-          (it.cantidad || 1) +
-          ")";
-        var alcance =
-          "   - Alcance: " + (it.alcance ? String(it.alcance) : "—");
-        var notas = "   - Notas: " + (it.notas ? String(it.notas) : "—");
-        return [line1, alcance, notas].join("\n");
-      })
-      .join("\n\n");
+    if (!Array.isArray(items) || items.length === 0) return "Sin ítems en el brief.";
+    return items.map(function (it, i) {
+      var line1 = (i + 1) + ") " + (it.titulo || "Servicio") + " (Cant: " + (it.cantidad || 1) + ")";
+      var alcance = "   - Alcance: " + (it.alcance ? String(it.alcance) : "—");
+      var notas = "   - Notas: " + (it.notas ? String(it.notas) : "—");
+      return [line1, alcance, notas].join("\n");
+    }).join("\n\n");
   } catch (e) {
     console.error("summarizeBrief error", e);
     return "No se pudo generar el resumen del brief.";
   }
 }
 
-// Pinta el panel "Solicitud enviada" con un snapshot del brief
+// "Solicitud enviada" con un snapshot del brief
 function renderSentSummary(items, rawJson) {
   var box = byId("sent-summary");
   var list = byId("sent-summary-list");
   var preEl = byId("sent-summary-json");
-  if (!box || !list || !preEl) return;
+  if (!box || !list) return;
 
   list.innerHTML = "";
 
@@ -307,31 +300,21 @@ function renderSentSummary(items, rawJson) {
       li.className = "brief-item";
       li.innerHTML =
         '<div class="brief-item__main">' +
-        '<strong class="brief-item__title">' +
-        escapeHTML(it.titulo || "Servicio") +
-        "</strong>" +
+        '<strong class="brief-item__title">' + escapeHTML(it.titulo || "Servicio") + '</strong>' +
         '<div class="brief-item__meta">' +
-        "<span><b>Cant.:</b> " +
-        (it.cantidad || 1) +
-        "</span>" +
-        "<span><b>Alcance:</b> " +
-        escapeHTML(it.alcance || "—") +
-        "</span>" +
-        "<span><b>Notas:</b> " +
-        escapeHTML(it.notas || "—") +
-        "</span>" +
-        "</div>" +
-        "</div>";
+        '<span><b>Cant.:</b> ' + (it.cantidad || 1) + '</span>' +
+        '<span><b>Alcance:</b> ' + escapeHTML(it.alcance || "—") + '</span>' +
+        '<span><b>Notas:</b> ' + escapeHTML(it.notas || "—") + '</span>' +
+        '</div>' +
+        '</div>';
       list.appendChild(li);
     });
   }
 
-  preEl.textContent = rawJson || "[]";
+  if (preEl) preEl.textContent = rawJson || "[]";
   box.hidden = false;
-  // lo llevo a la vista para feedback inmediato
-  try {
-    box.scrollIntoView({ behavior: "smooth", block: "start" });
-  } catch (_) { }
+
+  try { box.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (_) { }
 }
 
 // Inicializo manejo del form de contacto
@@ -344,16 +327,18 @@ function initContact() {
     e.preventDefault();
 
     const data = new FormData(form);
-    const nombre = data.get("nombre");
-    const email = data.get("email");
-    const mensaje = data.get("mensaje");
+    const nombre = String(data.get("nombre") || "").trim();
+    const email = String(data.get("email") || "").trim();
+    const mensaje = String(data.get("mensaje") || "").trim();
+
+    const inputNombre = byId("input-nombre");
+    const inputEmail = byId("input-email");
+    const inputMensaje = byId("input-mensaje");
 
     // Tomo el JSON del brief desde el textarea oculto
-    const briefJson = byId("brief-payload")
-      ? byId("brief-payload").value
-      : "[]";
+    const briefJson = byId("brief-payload") ? byId("brief-payload").value : "[]";
     let briefText;
-    let briefSnapshot = [];
+    let briefSnapshot = []; // snapshot para mostrar post-envío
 
     try {
       const parsed = JSON.parse(briefJson);
@@ -363,39 +348,80 @@ function initContact() {
       briefText = "No se pudo leer el brief.";
     }
 
-    // Validación
-    if (!nombre || !email || !mensaje) {
-      live.textContent = "Completá nombre, email y mensaje.";
-      return;
-    }
+    // Limpio estados previos de error
+    setFieldError(inputNombre, false);
+    setFieldError(inputEmail, false);
+    setFieldError(inputMensaje, false);
+
+    // Mas validaciones del forms antes de enviar
+
+    // Brief vacío
     if (Array.isArray(briefSnapshot) && briefSnapshot.length === 0) {
       live.textContent = "Agregá al menos un servicio a tu solicitud.";
       return;
     }
 
-    // Envío con EmailJS
+    // Nombre / Email faltantes
+    const faltanNombre = !nombre;
+    const faltanEmail = !email;
+
+    if (faltanNombre && faltanEmail) {
+      setFieldError(inputNombre, true);
+      setFieldError(inputEmail, true);
+      if (inputNombre) inputNombre.focus();
+      live.textContent = "Completá nombre y email.";
+      return;
+    }
+
+    if (faltanNombre) {
+      setFieldError(inputNombre, true);
+      if (inputNombre) inputNombre.focus();
+      live.textContent = "Completá el nombre.";
+      return;
+    }
+
+    if (faltanEmail) {
+      setFieldError(inputEmail, true);
+      if (inputEmail) inputEmail.focus();
+      live.textContent = "Completá el email.";
+      return;
+    }
+
+    // Email con formato inválido
+    if (!isValidEmail(email)) {
+      setFieldError(inputEmail, true);
+      if (inputEmail) inputEmail.focus();
+      live.textContent = "Ingresá un email válido (ej: nombre@dominio.com).";
+      return;
+    }
+
+    // Mensaje vacío
+    if (!mensaje) {
+      setFieldError(inputMensaje, true);
+      if (inputMensaje) inputMensaje.focus();
+      live.textContent = "Escribí un mensaje.";
+      return;
+    }
+
+    // Envío real con EmailJS 
     sendEmailJS({
       nombre: nombre,
       email: email,
       mensaje: mensaje,
       brief_text: briefText,
-      brief_json: briefJson,
+      brief_json: briefJson
     })
       .then(function () {
         console.log("[OK EmailJS] Envío exitoso, pintando resumen.");
         renderSentSummary(briefSnapshot, briefJson);
         form.reset();
         live.textContent = "¡Gracias! Mensaje enviado correctamente.";
-        setTimeout(function () {
-          live.textContent = "";
-        }, 3000);
+        setTimeout(function () { live.textContent = ""; }, 3000);
       })
       .catch(function (err) {
         console.error("EmailJS error:", err);
         live.textContent = "No pudimos enviar tu mensaje. Probá de nuevo.";
-        setTimeout(function () {
-          live.textContent = "";
-        }, 3000);
+        setTimeout(function () { live.textContent = ""; }, 3000);
       });
   });
 }
@@ -404,11 +430,10 @@ function initContact() {
 function sendEmailJS(params) {
   return new Promise(function (resolve, reject) {
     try {
-      var cfg = getEmailConfig(); // leo/valido config desde el DOM
+      var cfg = getEmailConfig();
 
-      // SDK debe estar disponible (lo cargamos fijo en <head>)
       if (!window.emailjs || !window.emailjs.init || !window.emailjs.send) {
-        return reject(new Error('EmailJS SDK no cargó. Verificá <script src="...email.min.js"></script> en <head>.'));
+        return reject(new Error('EmailJS SDK no cargó. Verificá <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script> en <head>.'));
       }
 
       window.emailjs.init(cfg.PUBLIC_KEY);
