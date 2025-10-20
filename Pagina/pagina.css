@@ -152,28 +152,42 @@ h3 {
 }
 
 /* Header y navegación */
-/* Header fijo arriba para acceso rápido al menú, sólido y con borde. */
+/* Header fijo arriba para acceso rápido al menú, sólido y con borde.*/
 header {
   position: sticky;
   top: 0;
   z-index: 20;
   background: #fff;
   border-bottom: 1px solid var(--border);
+  --header-h: clamp(3.5rem, 6vw, 4.5rem);/* alto del header: mínimo 3.5rem, crece con viewport, máximo 4.5rem */
 }
 
 .header__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 72px;
-  gap: 16px;
+  height: var(--header-h);
+  gap: 1rem;
 }
 
+.brand { 
+  display: inline-flex; 
+  align-items: center; 
+  line-height: 1; 
+}
+/* logo = 42% del alto del header (ajustá el factor si querés más chico/grande) */
 .brand img {
-  display: block
+  height: calc(var(--header-h) * 0.42);
+  width: auto;
+  inline-size: auto;
+  block-size: calc(var(--header-h) * 0.42);
 }
 
-/* Botón de hamburguesa (visible sólo en mobile) */
+@media (max-width: 54rem) {
+  header { --header-h: clamp(3.25rem, 7vw, 4rem); }
+}
+
+/* Botón de hamburguesa (mobile) */
 .nav-toggle {
   font: inherit;
   border: 1px solid var(--border);
@@ -212,25 +226,34 @@ header {
 
 /* Dropdown para mobile  */
 @media (max-width: 860px) {
-  .nav-toggle {
-    display: inline-block
-  }
+  .nav-toggle { display: inline-block; z-index: 1001; }
 
   .nav {
-    position: absolute;
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
     right: 0;
-    top: 72px;
+    z-index: 1000;
     background: #fff;
     border: 1px solid var(--border);
     border-radius: 12px;
     box-shadow: var(--shadow);
     padding: 12px;
-    margin: 8px;
+    margin: 0;
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: min(92vw, 320px);
+    width: min(92vw, 22rem);
+    max-height: calc(100dvh - var(--header-h) - 1rem);
+    overflow: auto;
+    margin-inline: auto;
+    inset-inline-end: clamp(.5rem, 2vw, 1rem);
+    width: min(92vw, 22rem);
   }
+
+  .nav[hidden] { display: none !important; }
 }
+
 
 /* Botones */
 /* primario (brand), ghost (borde) y danger (borrar). */
@@ -290,10 +313,21 @@ section {
 
 /* HERO: uso un fondo alterno sólido para separar visualmente la portada */
 
-.hero--flat {
+:root{
+  --header-h: 4.5rem;
+}
+/* Hero a pantalla completa, pero restando el header */
+.hero--flat{
   background: var(--bg-alt);
   border-bottom: 1px solid var(--border);
   padding: clamp(40px, 8vw, 96px) 0;
+  min-block-size: calc(100vh - var(--header-h));   /* fallback para navegadores viejos */
+  min-block-size: calc(100svh - var(--header-h));  /* móviles modernos: svh/dvh fixean la barra del browser */
+}
+@media (min-width: 768px){
+  .hero--flat{
+    min-block-size: calc(100dvh - var(--header-h));
+  }
 }
 
 /* Contenido en columna */

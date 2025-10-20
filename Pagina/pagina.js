@@ -161,7 +161,7 @@ function initUI() {
   // observer para actualizar por scroll
   try {
     const obs = new IntersectionObserver(function (entries) {
-      const visible = entries  // tomo la sección más visible
+      const visible = entries
         .filter(function (en) { return en.isIntersecting; })
         .sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; })[0];
       if (!visible) return;
