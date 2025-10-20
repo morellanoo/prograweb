@@ -112,15 +112,15 @@
         </section>
 
         <!-- Metodologia  -->
-            <div class="container">
-                <h2 id="metodologia-title">Cómo trabajamos</h2>
-                <ol class="timeline">
-                    <li><strong>Brief</strong> — Alineamos objetivos y contexto.</li>
-                    <li><strong>Propuesta</strong> — Diseño metodológico y planning.</li>
-                    <li><strong>Ejecución</strong> — Campo, análisis y sanity checks.</li>
-                    <li><strong>Entrega</strong> — Informe y workshop de insights.</li>
-                </ol>
-            </div>
+        <div class="container">
+            <h2 id="metodologia-title">Cómo trabajamos</h2>
+            <ol class="timeline">
+                <li><strong>Brief</strong> — Alineamos objetivos y contexto.</li>
+                <li><strong>Propuesta</strong> — Diseño metodológico y planning.</li>
+                <li><strong>Ejecución</strong> — Campo, análisis y sanity checks.</li>
+                <li><strong>Entrega</strong> — Informe y workshop de insights.</li>
+            </ol>
+        </div>
         </section>
 
         <!-- Casos -->
@@ -172,9 +172,10 @@
             <div class="container">
                 <h2 id="contacto-title">Contactanos</h2>
                 <!--Configuro EmailJS -->
-                <form id="contact-form" class="contact" novalidate data-emailjs-service="service_290h9gs" 
+                <form id="contact-form" class="contact" novalidate data-emailjs-service="service_290h9gs"
                     data-emailjs-template="template_kwxo81v">
                     <label>
+
                         <span>Nombre</span>
                         <input type="text" name="nombre" id="input-nombre" required />
                     </label>
@@ -186,6 +187,22 @@
                         <span>Empresa (opcional)</span>
                         <input type="text" name="empresa" id="input-empresa" />
                     </label>
+
+                    <!-- Resumen de lo que se envió (se completa desde JS) -->
+                    <div id="sent-summary" class="panel" hidden>
+                        <h3>Solicitud enviada</h3>
+                        <p class="section-intro">Estos son los ítems que recibimos con tu consulta:</p>
+
+                        <!-- lista legible -->
+                        <ul id="sent-summary-list" class="brief-list"></ul>
+
+                        <!-- por si el docente quiere ver también el bruto -->
+                        <details>
+                            <summary>Ver JSON enviado</summary>
+                            <pre id="sent-summary-json" style="white-space:pre-wrap;"></pre>
+                        </details>
+                    </div>
+                    
                     <label class="span-2">
                         <span>Mensaje</span>
                         <textarea name="mensaje" id="input-mensaje" rows="5" required></textarea>

@@ -230,7 +230,7 @@ var EMAILJS_CONFIG = {
     PUBLIC_KEY: "_v0uEUNkflsV7pfGo" // mi public key de EmailJS
 };
 
-// Helper: genera un resumen de texto del brief para incluir en el email
+// Helpers
 function summarizeBrief(items) {
     try {
         if (!Array.isArray(items) || items.length === 0) return "Sin ítems en el brief.";
@@ -245,6 +245,41 @@ function summarizeBrief(items) {
         return "No se pudo generar el resumen del brief.";
     }
 }
+
+// Pinta el panel "Solicitud enviada" con un snapshot del brief
+function renderSentSummary(items, rawJson) {
+    var box = byId("sent-summary");
+    var list = byId("sent-summary-list");
+    var preEl = byId("sent-summary-json");
+    if (!box || !list || !preEl) return;
+
+    list.innerHTML = "";
+
+    if (!Array.isArray(items) || items.length === 0) {
+        list.innerHTML = '<li class="brief-item"><div class="brief-item__main"><strong class="brief-item__title">Sin ítems</strong><div class="brief-item__meta">No se agregaron servicios al brief.</div></div></li>';
+    } else {
+        items.forEach(function (it) {
+            var li = document.createElement("li");
+            li.className = "brief-item";
+            li.innerHTML =
+                '<div class="brief-item__main">' +
+                '<strong class="brief-item__title">' + escapeHTML(it.titulo || "Servicio") + '</strong>' +
+                '<div class="brief-item__meta">' +
+                '<span><b>Cant.:</b> ' + (it.cantidad || 1) + '</span>' +
+                '<span><b>Alcance:</b> ' + escapeHTML(it.alcance || "—") + '</span>' +
+                '<span><b>Notas:</b> ' + escapeHTML(it.notas || "—") + '</span>' +
+                '</div>' +
+                '</div>';
+            list.appendChild(li);
+        });
+    }
+
+    preEl.textContent = rawJson || "[]";
+    box.hidden = false;
+    // lo llevo a la vista para feedback inmediato
+    try { box.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (_) { }
+}
+
 
 // Inicializo manejo del form de contacto
 function initContact() {
@@ -263,8 +298,18 @@ function initContact() {
         // Tomo el JSON del brief desde el textarea oculto
         const briefJson = byId("brief-payload") ? byId("brief-payload").value : "[]";
         let briefText;
-        try { briefText = summarizeBrief(JSON.parse(briefJson)); }
-        catch (_) { briefText = "No se pudo leer el brief."; }
+        let briefSnapshot = []; // <-- NUEVO
+
+        try {
+            const parsed = JSON.parse(briefJson);
+            briefSnapshot = Array.isArray(parsed) ? parsed.slice() : []; // copia
+            briefText = summarizeBrief(parsed);
+        } catch (_) {
+            briefText = "No se pudo leer el brief.";
+        }
+
+
+
 
         // Validación
         if (!nombre || !email || !mensaje) {
@@ -272,7 +317,7 @@ function initContact() {
             return;
         }
 
-        // Envío real con EmailJS 
+        // Envío con EmailJS 
         sendEmailJS({
             nombre: nombre,
             email: email,
@@ -281,6 +326,7 @@ function initContact() {
             brief_json: briefJson
         })
             .then(function () {
+                renderSentSummary(briefSnapshot, briefJson);
                 form.reset();
                 live.textContent = "¡Gracias! Mensaje enviado correctamente.";
                 setTimeout(function () { live.textContent = ""; }, 3000);
@@ -331,9 +377,9 @@ function escapeHTML(str) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    initUI(); 
-    renderBrief(); 
-    bindBriefEvents(); 
-    bindServiceButtons(); 
-    initContact(); 
+    initUI();
+    renderBrief();
+    bindBriefEvents();
+    bindServiceButtons();
+    initContact();
 });
