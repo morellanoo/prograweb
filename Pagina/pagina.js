@@ -42,7 +42,6 @@ function initUI() {
   function closeNav() {
     if (!btn || !nav) return;
     btn.setAttribute("aria-expanded", "false");
-    // En mobile lo oculto; en desktop debe quedar visible
     if (window.matchMedia("(max-width: 860px)").matches) {
       nav.hidden = true;
     } else {
@@ -58,11 +57,11 @@ function initUI() {
   function syncNavVisibilityToViewport() {
     if (!btn || !nav) return;
     if (window.matchMedia("(max-width: 860px)").matches) {
-      // mobile: oculto salvo que esté expandido
+      // mobile
       const expanded = btn.getAttribute("aria-expanded") === "true";
       nav.hidden = !expanded;
     } else {
-      // desktop: siempre visible y colapso el estado del botón
+      // desktop
       nav.hidden = false;
       btn.setAttribute("aria-expanded", "false");
     }

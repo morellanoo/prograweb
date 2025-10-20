@@ -101,7 +101,7 @@
         </section>
 
         <!-- Brief (CRUD) -->
-        <!--  “Tu solicitud” es el panel donde se listan los ítems que se fueron agregando. Se puede editar o eliminar "productos" . Además, mantengo un <textarea> oculto con el JSON final para EmailJS -->
+        <!--  “Tu solicitud” es el panel donde se listan los ítems que se fueron agregando. Se puede editar o eliminar "productos"  -->
         <section id="brief" aria-labelledby="brief-title">
             <div class="container">
                 <h2 id="brief-title">Tu solicitud</h2>
@@ -109,19 +109,19 @@
 
                 <div class="brief panel">
                     <div class="brief__head">
-                        <!-- Contador simple de elementos para feedback rápido -->
+                        <!-- Contador de elementos -->
                         <span><strong>Ítems:</strong> <span id="brief-count">0</span></span>
                         <!-- Botón para vaciar el brief completo (confirmo en JS) -->
                         <button id="brief-clear" class="btn-ghost">Vaciar</button>
                     </div>
 
-                    <!-- Lista dinámica (la rellena JS con <li>) -->
+                    <!-- Lista dinámica -->
                     <ul id="brief-list" class="brief-list" aria-live="polite"></ul>
 
                     <!-- Mensaje cuando la lista está vacía -->
                     <p id="brief-empty">Todavía no agregaste servicios. Sumá alguno desde la sección anterior.</p>
 
-                    <!-- Campo técnico sincronizado por JS: viaja por EmailJS -->
+                    <!-- Campo para EmailJS -->
                     <textarea id="brief-payload" class="visually-hidden" aria-hidden="true"></textarea>
                 </div>
             </div>
@@ -132,25 +132,29 @@
             <div class="container">
                 <h2 id="metodologia-title">Cómo trabajamos</h2>
                 <ol class="timeline">
-                        <li><strong>Kick-off & Brief profundo</strong> 
-                            <p>Workshop inicial con cliente y equipo b-Shopper para alinear objetivos y criterios de exito</p>
-                        </li>
-                        <li> <strong>Diseño metodológico</strong> - Analizamos herramientas y definimos el proyecto
-                            <p> Entregable: propuesta con supuestos, tiempos y costos</p>
-                        </li>
-                        <li> <strong>Preparación de campo</strong> - Acondicionamos todo para salir a terreno
-                            <p>Elaboramos cuestionarios/guiones, corremos piloto, programamos encuestas y capacitamos al equipo</p>
-                        </li>
-                        <li> <strong>Recolección & control</strong> - Ejecución con “sanity checks” permanentes
-                            <p>Monitoreo de cuotas, validación de respuestas, auditorías y reportes de avance para tomar
-                                decisiones en ruta</p>
-                        </li>
-                        <li> <strong>Análisis</strong> - Limpieza, codificación y lectura integral
-                            <p>Analisis en profundo de los datos obtenidos. Salida: hallazgos clave + narrativa (“storyline”) con oportunidades</p>
-                        </li>
-                        <li> <strong>Entrega & activación</strong> - Del insight a la acción
-                            <p>Reporte ejecutivo y anexo técnico; workshop de activación con “Acciones Estratégicas / Efectivas / Inmediatas”</p>
-                        </li>
+                    <li><strong>Kick-off & Brief profundo</strong>
+                        <p>Workshop inicial con cliente y equipo b-Shopper para alinear objetivos y criterios de exito
+                        </p>
+                    </li>
+                    <li> <strong>Diseño metodológico</strong> - Analizamos herramientas y definimos el proyecto
+                        <p> Entregable: propuesta con supuestos, tiempos y costos</p>
+                    </li>
+                    <li> <strong>Preparación de campo</strong> - Acondicionamos todo para salir a terreno
+                        <p>Elaboramos cuestionarios/guiones, corremos piloto, programamos encuestas y capacitamos al
+                            equipo</p>
+                    </li>
+                    <li> <strong>Recolección & control</strong> - Ejecución con “sanity checks” permanentes
+                        <p>Monitoreo de cuotas, validación de respuestas, auditorías y reportes de avance para tomar
+                            decisiones en ruta</p>
+                    </li>
+                    <li> <strong>Análisis</strong> - Limpieza, codificación y lectura integral
+                        <p>Analisis en profundo de los datos obtenidos. Salida: hallazgos clave + narrativa
+                            (“storyline”) con oportunidades</p>
+                    </li>
+                    <li> <strong>Entrega & activación</strong> - Del insight a la acción
+                        <p>Reporte ejecutivo y anexo técnico; workshop de activación con “Acciones Estratégicas /
+                            Efectivas / Inmediatas”</p>
+                    </li>
                 </ol>
             </div>
         </section>

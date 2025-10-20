@@ -21,7 +21,7 @@
 
 
 /* Tokens */
-/* Elegi los colores en base al manual de la marca */
+/* Elegí los colores en base al manual de la marca */
 :root {
   --brand: #003056;
   /* Azul institucional*/
@@ -49,7 +49,7 @@
   --container: min(1100px, 92vw);
   /* Ancho máximo del contenido útil */
   --radius: 12px;
-  /* Redondeo homogéneo de tarjetas y campos */
+  /* Redondeo de tarjetas y campos */
 
 
   /* Escala tipográfica (coherente con manual) */
@@ -100,7 +100,7 @@ a:hover {
   margin-inline: auto
 }
 
-/* Clase para ocultar visualmente pero mantener accesible (WAI-ARIA) */
+/* Clase para ocultar visualmente pero mantener accesible (WAI-ARIA) (accesibilidad)*/
 .visually-hidden {
   position: absolute !important;
   width: 1px;
@@ -168,7 +168,6 @@ header {
   line-height: 1;
 }
 
-/* logo = 42% del alto del header */
 .brand img {
   height: calc(var(--header-h) * 0.42);
   width: auto;
@@ -193,7 +192,7 @@ header {
   display: none;
 }
 
-/* Menú en desktop: links con indicador activo (línea amarilla) */
+/* Menú en desktop */
 .nav {
   display: flex;
   gap: 22px;
@@ -206,7 +205,6 @@ header {
   letter-spacing: .2px;
   padding: 10px 0;
 }
-
 
 /* Dropdown para mobile  */
 @media (max-width: 860px) {
@@ -326,7 +324,7 @@ section {
   align-content: start;
 }
 
-/* H1 en Bodoni + subrayado amarillo de marca */
+/* H1 en Bodoni + subrayado amarillo*/
 .hero__title {
   margin: 0;
   font-family: var(--font-title);
@@ -467,7 +465,6 @@ section {
 }
 
 /* Brief Builder (CRUD) */
-/* Contenedor del panel con sombra y bordes */
 .panel {
   background: #fff;
   border: 2px solid var(--accent);
@@ -524,7 +521,7 @@ section {
 }
 
 /* Timeline  */
-/* Lista ordenada con puntos y línea vertical */
+/* Lista ordenada con puntos */
 .timeline {
   list-style: none;
   padding: 0;
@@ -663,7 +660,6 @@ section {
     aspect-ratio: 4 / 3;
   }
 }
-
 
 /*  Contacto  */
 /* Form en grid de 2 columnas (desktop) y 1 columna (mobile). */
