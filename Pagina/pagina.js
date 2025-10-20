@@ -3,7 +3,10 @@
 function byId(id) {
   return document.getElementById(id);
 }
-// querySelectorAll (como Array)
+// querySelector y querySelectorAll
+function q(sel, el = document) {
+  return el.querySelector(sel);
+}
 function qa(sel, el = document) {
   return Array.from(el.querySelectorAll(sel));
 }
@@ -86,12 +89,13 @@ function initUI() {
       closeNav();
     });
 
-    // se cierra al hacer click afuera del menu (mobile) — dejo SOLO pointerdown (no click)
+    // se cierra al hacer click afuera del menu (mobile)
     function outsideHandler(e) {
       if (nav.hidden) return;
       const inside = nav.contains(e.target) || btn.contains(e.target);
       if (!inside) closeNav();
     }
+    document.addEventListener("click", outsideHandler);
     document.addEventListener("pointerdown", outsideHandler);
 
     // cerrar con ESC
@@ -99,18 +103,15 @@ function initUI() {
       if (e.key === "Escape") closeNav();
     });
 
-    // se cierra si se scrollea (mobile) — (lo pediste conservar)
-    window.addEventListener(
-      "scroll",
-      function () {
-        if (!window.matchMedia("(max-width: 860px)").matches) return;
-        closeNav();
-      },
-      { passive: true }
-    );
+    // se cierra si se scrollea (mobile)
+    window.addEventListener("scroll", function () {
+      if (!window.matchMedia("(max-width: 860px)").matches) return;
+      closeNav();
+    }, { passive: true });
 
-    // sincronizar en resize + estado inicial (UNA sola llamada)
+    // sincronizar en resize
     window.addEventListener("resize", syncNavVisibilityToViewport);
+    // estado inicial
     syncNavVisibilityToViewport();
   }
 
@@ -382,6 +383,7 @@ function summarizeBrief(items) {
 function renderSentSummary(items, rawJson) {
   var box = byId("sent-summary");
   var list = byId("sent-summary-list");
+  var preEl = byId("sent-summary-json");
   if (!box || !list) return;
 
   list.innerHTML = "";
@@ -406,41 +408,10 @@ function renderSentSummary(items, rawJson) {
     });
   }
 
+  if (preEl) preEl.textContent = rawJson || "[]";
   box.hidden = false;
 
   try { box.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (_) { }
-}
-
-/* EmailJS */
-// Leo template desde el form de contacto cuando se envia y valido
-function getEmailConfig() {
-  var f = document.getElementById("contact-form");
-  var SERVICE_ID = f ? (f.dataset.emailjsService || "") : "";
-  var TEMPLATE_ID = f ? (f.dataset.emailjsTemplate || "") : "";
-  var PUBLIC_KEY = "_v0uEUNkflsV7pfGo"; // mi public key de EmailJS
-  if (!SERVICE_ID || !TEMPLATE_ID) {
-    throw new Error("Falta configurar SERVICE_ID o TEMPLATE_ID en el form (data-emailjs-*)");
-  }
-  return { SERVICE_ID, TEMPLATE_ID, PUBLIC_KEY };
-}
-
-// Inicializa con PUBLIC_KEY y envía con validación explícita
-function sendEmailJS(params) {
-  return new Promise(function (resolve, reject) {
-    try {
-      var cfg = getEmailConfig();
-      if (!window.emailjs || !window.emailjs.init || !window.emailjs.send) {
-        return reject(new Error('EmailJS SDK no cargó. Verificá <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script> en <head>.'));
-      }
-      window.emailjs.init(cfg.PUBLIC_KEY);
-      window.emailjs
-        .send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, params)
-        .then(resolve)
-        .catch(reject);
-    } catch (cfgErr) {
-      reject(cfgErr);
-    }
-  });
 }
 
 // Inicializo manejo del form de contacto
@@ -479,11 +450,9 @@ function initContact() {
     setFieldError(inputEmail, false);
     setFieldError(inputMensaje, false);
 
-    /* Validaciones del forms antes de enviar */
-    if (Array.isArray(briefSnapshot) && briefSnapshot.length === 0) {
-      live.textContent = "Agregá al menos un servicio a tu solicitud.";
-      return;
-    }
+    /* Validaciones del forms antes de enviar (live.textContent sirve unicamente de accesibilidad)*/
+
+    // Nombre / Email faltantes
     const faltanNombre = !nombre;
     const faltanEmail = !email;
 
@@ -494,34 +463,47 @@ function initContact() {
       live.textContent = "Completá nombre y email.";
       return;
     }
+
     if (faltanNombre) {
       setFieldError(inputNombre, true);
       if (inputNombre) inputNombre.focus();
       live.textContent = "Completá el nombre.";
       return;
     }
+
     if (faltanEmail) {
       setFieldError(inputEmail, true);
       if (inputEmail) inputEmail.focus();
       live.textContent = "Completá el email.";
       return;
     }
+    //  Nombre con formato inválido
     if (!isValidName(nombre)) {
       setFieldError(inputNombre, true);
       if (inputNombre) inputNombre.focus();
       live.textContent = "Ingresá un nombre válido (sólo letras, mínimo 2 caracteres).";
       return;
     }
+
+    // Email con formato inválido
     if (!isValidEmail(email)) {
       setFieldError(inputEmail, true);
       if (inputEmail) inputEmail.focus();
       live.textContent = "Ingresá un email válido (ej: nombre@dominio.com).";
       return;
     }
+
+    // Mensaje vacío
     if (!mensaje) {
       setFieldError(inputMensaje, true);
       if (inputMensaje) inputMensaje.focus();
       live.textContent = "Escribí un mensaje.";
+      return;
+    }
+
+    // Brief vacío
+    if (Array.isArray(briefSnapshot) && briefSnapshot.length === 0) {
+      live.textContent = "Agregá al menos un servicio a tu solicitud.";
       return;
     }
 
@@ -537,7 +519,7 @@ function initContact() {
         console.log("[OK EmailJS] Envío exitoso, pintando resumen.");
         renderSentSummary(briefSnapshot, briefJson);
         form.reset();
-        live.textContent = "¡Gracias! Mensaje enviado correctamente!";
+        live.textContent = "¡Gracias! Mensaje enviado correctamente.";
         setTimeout(function () { live.textContent = ""; }, 3000);
       })
       .catch(function (err) {
@@ -548,6 +530,22 @@ function initContact() {
   });
 }
 
+// Inicializa con PUBLIC_KEY y envía con validación
+function sendEmailJS(params) {
+  return new Promise(function (resolve, reject) {
+    try {
+      var cfg = getEmailConfig();
+      window.emailjs.init(cfg.PUBLIC_KEY);
+      window.emailjs
+        .send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, params)
+        .then(resolve)
+        .catch(reject);
+
+    } catch (cfgErr) {
+      reject(cfgErr);
+    }
+  });
+}
 
 /* Cosas utiles */
 function announce(msg) {
