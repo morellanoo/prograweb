@@ -386,6 +386,13 @@ function initContact() {
       live.textContent = "Completá el email.";
       return;
     }
+    //Nombre con formato inválido
+    function isValidName(value) {
+      const s = String(value || "").trim();
+      if (s.length < 2) return false;
+      if (/\d/.test(s)) return false;
+      return /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü' -]+$/.test(s);
+    }
 
     // Email con formato inválido
     if (!isValidEmail(email)) {
