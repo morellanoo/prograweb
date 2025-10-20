@@ -112,6 +112,7 @@
         </section>
 
         <!-- Metodologia  -->
+        <section id="metodologia" aria-labelledby="metodologia-title"></section>
         <div class="container">
             <h2 id="metodologia-title">Cómo trabajamos</h2>
             <ol class="timeline">
@@ -188,21 +189,6 @@
                         <input type="text" name="empresa" id="input-empresa" />
                     </label>
 
-                    <!-- Resumen de lo que se envió (se completa desde JS) -->
-                    <div id="sent-summary" class="panel" hidden>
-                        <h3>Solicitud enviada</h3>
-                        <p class="section-intro">Estos son los ítems que recibimos con tu consulta:</p>
-
-                        <!-- lista legible -->
-                        <ul id="sent-summary-list" class="brief-list"></ul>
-
-                        <!-- por si el docente quiere ver también el bruto -->
-                        <details>
-                            <summary>Ver JSON enviado</summary>
-                            <pre id="sent-summary-json" style="white-space:pre-wrap;"></pre>
-                        </details>
-                    </div>
-                    
                     <label class="span-2">
                         <span>Mensaje</span>
                         <textarea name="mensaje" id="input-mensaje" rows="5" required></textarea>
@@ -211,6 +197,19 @@
                         <button type="submit" class="btn">Enviar</button>
                     </div>
                 </form>
+                </form>
+
+                <!-- Resumen de lo que se envió -->
+                <div id="sent-summary" class="panel" hidden>
+                    <h3>Solicitud enviada</h3>
+                    <p class="section-intro">Estos son los ítems que recibimos con tu consulta:</p>
+                    <ul id="sent-summary-list" class="brief-list"></ul>
+                    <details>
+                        <summary>Ver JSON enviado</summary>
+                        <pre id="sent-summary-json" style="white-space:pre-wrap;"></pre>
+                    </details>
+                </div>
+
             </div>
         </section>
     </main>
