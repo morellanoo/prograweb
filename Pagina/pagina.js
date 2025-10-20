@@ -141,38 +141,6 @@ function initUI() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
-
-  // Resaltado del link activo según sección visible
-  const navLinks = qa("#site-nav a");
-  const sections = qa("main section[id]");
-
-  function setActive(hash) {
-    navLinks.forEach(function (a) {
-      a.dataset.active = (a.getAttribute("href") === hash) ? "true" : "false";
-    });
-  }
-  setActive(location.hash || "#inicio"); // estado inicial: si no hay hashtag, apunto a #inicio
-
-  // al cambiar el hashtag manualmente
-  window.addEventListener("hashchange", function () {
-    setActive(location.hash || "#inicio");
-  });
-
-  // observer para actualizar por scroll
-  try {
-    const obs = new IntersectionObserver(function (entries) {
-      const visible = entries
-        .filter(function (en) { return en.isIntersecting; })
-        .sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; })[0];
-      if (!visible) return;
-      const hash = "#" + visible.target.id;
-      setActive(hash);
-    }, { rootMargin: "-20% 0px -60% 0px", threshold: [0.25, 0.5, 0.75] });
-
-    sections.forEach(function (sec) { obs.observe(sec); });
-  } catch (_) {
-    // fallback: si IntersectionObserver no está, me quedo con el hash
-  }
 }
 
 

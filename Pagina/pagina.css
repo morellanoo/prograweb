@@ -211,17 +211,6 @@ header {
   padding: 10px 0;
 }
 
-.nav a[data-active="true"]::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -12px;
-  height: 3px;
-  background: var(--accent);
-  transform: translateZ(0);
-  /* evita “saltos” en algunos navegadores */
-}
 
 /* Dropdown para mobile  */
 @media (max-width: 860px) {
@@ -319,8 +308,7 @@ section {
   background: var(--bg-alt);
   border-bottom: 1px solid var(--border);
   padding: clamp(40px, 8vw, 96px) 0;
-  min-block-size: calc(100vh - var(--header-h));   /* fallback para navegadores viejos */
-  min-block-size: calc(100svh - var(--header-h));  /* móviles modernos: svh/dvh fixean la barra del browser */
+  min-block-size: calc(100svh - var(--header-h));
 }
 @media (min-width: 768px){
   .hero--flat{
@@ -541,31 +529,19 @@ section {
   display: grid;
   gap: 14px;
 }
-
 .timeline li {
   position: relative;
-  padding-left: 30px
+  padding-left: 30px;
 }
-
 .timeline li::before {
   content: "";
   position: absolute;
   left: 10px;
-  top: .45em;
+  top: .55em;
   width: 8px;
   height: 8px;
   background: var(--brand);
   border-radius: 50%;
-}
-
-.timeline li+li::after {
-  content: "";
-  position: absolute;
-  left: 13px;
-  top: -18px;
-  bottom: 18px;
-  width: 2px;
-  background: var(--border);
 }
 
 
@@ -712,7 +688,6 @@ section {
 .contact input:focus,
 .contact textarea:focus {
   border-color: var(--brand);
-  /* anillo de enfoque accesible */
 }
 
 .contact .span-2 {
